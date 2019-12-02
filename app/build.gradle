@@ -43,4 +43,5 @@ dependencies {
     implementation project(':movies')
 
     debugImplementation dependency.debug.values()
+    testImplementation dependency.testing.values()
 }
