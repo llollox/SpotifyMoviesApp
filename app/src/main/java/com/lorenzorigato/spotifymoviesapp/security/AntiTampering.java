@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 
+import com.lorenzorigato.base.security.IAntiTampering;
 import com.lorenzorigato.spotifymoviesapp.BuildConfig;
 
 public class AntiTampering implements IAntiTampering {

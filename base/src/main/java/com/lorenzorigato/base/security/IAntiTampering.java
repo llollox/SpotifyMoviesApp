@@ -1,4 +1,4 @@
-package com.lorenzorigato.spotifymoviesapp.security;
+package com.lorenzorigato.base.security;
 
 public interface IAntiTampering {
     boolean isAppTampered();

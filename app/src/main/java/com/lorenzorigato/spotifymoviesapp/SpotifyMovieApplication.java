@@ -14,7 +14,9 @@ public class SpotifyMovieApplication extends DaggerApplication {
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
         ApplicationComponent.Builder builder = DaggerApplicationComponent.builder();
         builder.seedInstance(this);
-        return builder.build();
+        return builder
+                .setApplication(this)
+                .build();
     }
 
     @Override
