@@ -1,0 +1,71 @@
+apply from: '../versions.gradle'
+
+ext {
+
+    dependency = [
+
+            architectureComponents : [
+                    lifecycle           : "androidx.lifecycle:lifecycle-extensions:${versions.architectureComponents.lifecycle}", // ViewModel and LiveData
+                    room                : "androidx.room:room-runtime:${versions.database.room}"
+            ],
+
+            dataBase : [
+                    roomCompiler        : "androidx.room:room-compiler:${versions.database.room}",
+            ],
+
+            dataBinding : [
+                    compiler            : "androidx.databinding:databinding-compiler:${versions.dataBinding.compiler}"
+            ],
+
+            debug: [
+                    leakCanary          : "com.squareup.leakcanary:leakcanary-android:${versions.debug.leakCanary}"
+            ],
+
+            dependencyInjection : [
+                    dagger              : "com.google.dagger:dagger:${versions.dependencyInjection.dagger}",
+                    daggerandroid       : "com.google.dagger:dagger-android-support:${versions.dependencyInjection.dagger}",
+            ],
+
+            dependencyInjectionProcessor : [
+                    daggercompiler     : "com.google.dagger:dagger-compiler:${versions.dependencyInjection.dagger}",
+                    daggerprocessor    : "com.google.dagger:dagger-android-processor:${versions.dependencyInjection.dagger}",
+            ],
+
+            image : [
+                    picasso            : "com.squareup.picasso:picasso:${versions.image.picasso}"
+            ],
+
+            networking : [
+                    gson                 : "com.google.code.gson:gson:${versions.networking.gson}",
+                    loggingInterceptor   : "com.squareup.okhttp3:logging-interceptor:${versions.networking.logginInterceptor}",
+                    retrofit             : "com.squareup.retrofit2:retrofit:${versions.networking.retrofit}",
+                    retrofitGson         : "com.squareup.retrofit2:converter-gson:${versions.networking.retrofit}"
+            ],
+
+            testing : [
+                    junit                : "junit:junit:${versions.testing.jUnit}",
+                    architectureComponents  : "androidx.arch.core:core-testing:${versions.testing.architectureComponents}",
+                    roomTesting          : "androidx.room:room-testing:${versions.database.room}",
+                    mokitocore           : "org.mockito:mockito-core:${versions.testing.mockitoCore}"
+            ],
+
+            testingAndroid : [
+                    espressocore         : "androidx.test.espresso:espresso-core:${versions.testingAndroid.espresso}",
+                    espressoContrib      : "androidx.test.espresso:espresso-contrib:${versions.testingAndroid.espresso}",
+                    testrunner           : "androidx.test:runner:${versions.testingAndroid.testRunner}",
+                    testrules            : "androidx.test:rules:${versions.testingAndroid.testRules}",
+                    mockwebserver        : "com.squareup.okhttp3:mockwebserver:${versions.testingAndroid.mockWebServer}"
+            ],
+
+            ui : [
+                    appcompat            : "androidx.appcompat:appcompat:${versions.ui.appCompat}",
+                    constraintLayout     : "androidx.constraintlayout:constraintlayout:${versions.ui.constraintLayout}",
+                    paging               : "com.github.markomilos:paginate:${versions.ui.paging}",
+                    recyclerView         : "androidx.recyclerview:recyclerview:${versions.ui.recyclerView}"
+            ],
+
+            util : [
+                    timber               : "com.jakewharton.timber:timber:${versions.util.timber}"
+            ]
+    ]
+}

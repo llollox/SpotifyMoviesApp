@@ -1,0 +1,70 @@
+ext {
+
+    versions = [
+
+            architectureComponents : [
+                    lifecycle       : "2.1.0"
+            ],
+
+            database : [
+                    room            : "2.2.1"
+            ],
+
+            dataBinding : [
+                    compiler        : "3.5.2"
+            ],
+
+            debug: [
+                    leakCanary      : "2.0-beta-3"
+            ],
+
+            dependencyInjection : [
+                    dagger          : "2.16"
+            ],
+
+            image : [
+                    picasso         : '2.71828'
+            ],
+
+//            kotlin: [
+//                    ktx             : '1.2.0-beta01'
+//            ],
+
+            networking: [
+                    gson            : '2.8.5',
+                    logginInterceptor: '4.2.1',
+                    retrofit        : '2.6.2'
+            ],
+
+            sdk: [
+                    compile         : 28,
+                    min             : 21,
+                    target          : 28
+            ],
+
+            testing: [
+                    jUnit           : '4.12',
+                    architectureComponents: '2.1.0',
+                    mockitoCore     : '2.23.0'
+//                    mockitoKotlin   : '1.5.0'
+            ],
+
+            testingAndroid: [
+                    espresso        : '3.2.0',
+                    testRunner      : '1.2.0',
+                    testRules       : '1.2.0',
+                    mockWebServer   : '4.2.1'
+            ],
+
+            ui: [
+                    appCompat       : '1.1.0',
+                    constraintLayout: '1.1.3',
+                    paging          : '0.5.1',
+                    recyclerView    : '1.0.0'
+            ],
+
+            util: [
+                    timber          : '4.7.1'
+            ]
+    ]
+}
