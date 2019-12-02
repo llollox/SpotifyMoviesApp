@@ -28,6 +28,23 @@ android {
         outputFormat = 'html'
         outputDirectory = "$buildDir/javadoc"
     }
+
+    flavorDimensions "default"
+    productFlavors {
+        dev {
+            // The following configuration limits the "development" flavor to use only xxhdpi screen-density resources
+            resConfigs "xxhdpi"
+        }
+
+        prod {
+
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {

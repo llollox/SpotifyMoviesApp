@@ -3,7 +3,8 @@ ext {
     versions = [
 
             architectureComponents : [
-                    lifecycle       : "2.1.0"
+                    lifecycle       : "2.1.0",
+                    navigation      : "2.1.0",
             ],
 
             database : [
@@ -26,10 +27,6 @@ ext {
                     picasso         : '2.71828'
             ],
 
-//            kotlin: [
-//                    ktx             : '1.2.0-beta01'
-//            ],
-
             networking: [
                     gson            : '2.8.5',
                     logginInterceptor: '4.2.1',
@@ -46,7 +43,6 @@ ext {
                     jUnit           : '4.12',
                     architectureComponents: '2.1.0',
                     mockitoCore     : '2.23.0'
-//                    mockitoKotlin   : '1.5.0'
             ],
 
             testingAndroid: [

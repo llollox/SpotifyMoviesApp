@@ -6,6 +6,8 @@ ext {
 
             architectureComponents : [
                     lifecycle           : "androidx.lifecycle:lifecycle-extensions:${versions.architectureComponents.lifecycle}", // ViewModel and LiveData
+                    navigationFragment  : "androidx.navigation:navigation-fragment:${versions.architectureComponents.navigation}",
+                    navigationUi        : "androidx.navigation:navigation-ui:${versions.architectureComponents.navigation}",
                     room                : "androidx.room:room-runtime:${versions.database.room}"
             ],
 
@@ -33,6 +35,10 @@ ext {
 
             image : [
                     picasso            : "com.squareup.picasso:picasso:${versions.image.picasso}"
+            ],
+
+            navigation : [
+
             ],
 
             networking : [

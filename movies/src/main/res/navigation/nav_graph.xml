@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/search_fragment_dest">
+
+    <fragment
+        android:id="@+id/search_fragment_dest"
+        android:name="com.lorenzorigato.movies.ui.search.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/search_fragment">
+
+        <action
+            android:id="@+id/action_search_fragment_dest_to_detail_fragment_dest"
+            app:destination="@id/detail_fragment_dest" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detail_fragment_dest"
+        android:name="com.lorenzorigato.movies.ui.detail.DetailFragment"
+        android:label="DetailFragment"
+        tools:layout="@layout/detail_fragment"/>
+
+    <fragment
+        android:id="@+id/favorites_fragment_dest"
+        android:name="com.lorenzorigato.movies.ui.favorites.FavoritesFragment"
+        android:label="FavoritesFragment"
+        tools:layout="@layout/favorites_fragment"/>
+
+</navigation>
