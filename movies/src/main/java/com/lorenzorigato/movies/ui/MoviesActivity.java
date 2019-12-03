@@ -1,6 +1,9 @@
 package com.lorenzorigato.movies.ui;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -22,6 +25,10 @@ public class MoviesActivity extends DaggerAppCompatActivity {
 
     @Inject
     IAntiTampering antiTampering;
+
+    @Inject
+    IMoviesNavigator moviesNavigator;
+
 
     // Private class attributes ********************************************************************
     private DrawerLayout drawerLayout;
@@ -60,6 +67,22 @@ public class MoviesActivity extends DaggerAppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.movies_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.info_menu) {
+            this.moviesNavigator.goToInformation(this);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    // Private class methods ***********************************************************************
     private void setupNavigationDrawer() {
         this.drawerLayout = findViewById(R.id.drawer_layout);
         this.drawerLayout.setStatusBarBackground(R.color.colorPrimaryDark);

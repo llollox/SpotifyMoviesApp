@@ -1,4 +1,4 @@
-package com.lorenzorigato.spotifymoviesapp.di;
+package com.lorenzorigato.spotifymoviesapp.di.module;
 
 import android.app.Application;
 
