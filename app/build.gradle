@@ -59,6 +59,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    implementation dependency.about.values()
     implementation dependency.dependencyInjection.values()
     implementation dependency.networking.values()
     implementation dependency.util.values()
@@ -67,7 +68,6 @@ dependencies {
     // Feature Modules
     implementation project(':base')
     implementation project(':movies')
-    implementation project(':settings')
 
     debugImplementation dependency.debug.values()
     testImplementation dependency.testing.values()

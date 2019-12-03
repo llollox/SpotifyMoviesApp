@@ -2,6 +2,10 @@ ext {
 
     versions = [
 
+            about : [
+                    openSourceLibraries : "7.0.4"
+            ],
+
             architectureComponents : [
                     lifecycle       : "2.1.0",
                     navigation      : "2.1.0",

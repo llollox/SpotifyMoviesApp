@@ -67,8 +67,8 @@ public class MoviesActivity extends DaggerAppCompatActivity {
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         NavigationUIExtended.setupWithNavController(navigationView, getNavController(), item -> {
-            if (item.getItemId() == R.id.action_settings) {
-                MoviesActivity.this.moviesNavigator.goToSettings(MoviesActivity.this);
+            if (item.getItemId() == R.id.action_about) {
+                MoviesActivity.this.moviesNavigator.goToAbout(MoviesActivity.this);
                 return true;
             }
             return false;
