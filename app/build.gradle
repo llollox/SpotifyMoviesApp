@@ -58,6 +58,7 @@ dependencies {
     // Feature Modules
     implementation project(':base')
     implementation project(':movies')
+    implementation project(':settings')
 
     debugImplementation dependency.debug.values()
     testImplementation dependency.testing.values()

@@ -1,0 +1,8 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.lorenzorigato.settings">
+
+    <application>
+        <activity android:name=".SettingsActivity"/>
+    </application>
+
+</manifest>

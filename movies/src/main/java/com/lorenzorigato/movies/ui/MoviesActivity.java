@@ -77,7 +77,7 @@ public class MoviesActivity extends DaggerAppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.info_menu) {
-            this.moviesNavigator.goToInformation(this);
+            this.moviesNavigator.goToSettings(this);
         }
         return super.onOptionsItemSelected(item);
     }
