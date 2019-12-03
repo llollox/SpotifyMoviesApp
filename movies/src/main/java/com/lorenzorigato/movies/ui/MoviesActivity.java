@@ -11,6 +11,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.lorenzorigato.base.security.IAntiTampering;
+import com.lorenzorigato.movies.BuildConfig;
 import com.lorenzorigato.movies.R;
 
 import javax.inject.Inject;
@@ -30,6 +31,13 @@ public class MoviesActivity extends DaggerAppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!BuildConfig.DEBUG && BuildConfig.FLAVOR.equals("prod")) {
+            if (this.antiTampering.isAppTampered()) {
+                this.finishAndRemoveTask();
+                return;
+            }
+        }
 
         setContentView(R.layout.movies_activity);
         setupNavigationDrawer();
