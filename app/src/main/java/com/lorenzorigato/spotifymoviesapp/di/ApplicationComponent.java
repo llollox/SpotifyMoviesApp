@@ -6,7 +6,8 @@ import com.lorenzorigato.base.di.scope.ApplicationScope;
 import com.lorenzorigato.movies.di.MoviesModule;
 import com.lorenzorigato.spotifymoviesapp.SpotifyMovieApplication;
 import com.lorenzorigato.spotifymoviesapp.di.module.NavigatorModule;
-import com.lorenzorigato.spotifymoviesapp.di.module.SecurityModule;
+import com.lorenzorigato.base.di.module.SecurityModule;
+import com.lorenzorigato.spotifymoviesapp.di.module.UtilModule;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -19,6 +20,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
           AndroidSupportInjectionModule.class,
           SecurityModule.class,
           NavigatorModule.class,
+          UtilModule.class,
           MoviesModule.class}
 )
 public interface ApplicationComponent extends AndroidInjector<SpotifyMovieApplication> {

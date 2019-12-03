@@ -1,11 +1,10 @@
-package com.lorenzorigato.spotifymoviesapp.security;
+package com.lorenzorigato.base.security.antitampering;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 
-import com.lorenzorigato.base.security.IAntiTampering;
-import com.lorenzorigato.spotifymoviesapp.BuildConfig;
+import com.lorenzorigato.base.util.IAppInfo;
 
 public class AntiTampering implements IAntiTampering {
 
@@ -16,11 +15,13 @@ public class AntiTampering implements IAntiTampering {
 
     // Instance Variables **************************************************************************
     private Context context;
+    private IAppInfo appInfo;
 
 
     // Constructor *********************************************************************************
-    public AntiTampering(Context context) {
+    public AntiTampering(Context context, IAppInfo appInfo) {
         this.context = context;
+        this.appInfo = appInfo;
     }
 
 
@@ -35,7 +36,7 @@ public class AntiTampering implements IAntiTampering {
 
     // Private class methods ***********************************************************************
     boolean isApplicationIdValid() {
-        return BuildConfig.APPLICATION_ID.equals(VALID_APPLICATION_ID);
+        return this.appInfo.getApplicationId().equals(VALID_APPLICATION_ID);
     }
 
     boolean isAppRunningOnEmulator() {

@@ -1,4 +1,4 @@
-package com.lorenzorigato.base.security;
+package com.lorenzorigato.base.security.antitampering;
 
 public interface IAntiTampering {
     boolean isAppTampered();

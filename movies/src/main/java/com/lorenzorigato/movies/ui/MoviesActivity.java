@@ -10,8 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
-import com.lorenzorigato.base.security.IAntiTampering;
-import com.lorenzorigato.movies.BuildConfig;
+import com.lorenzorigato.base.security.ISecurityManager;
 import com.lorenzorigato.movies.R;
 import com.lorenzorigato.movies.ui.util.NavigationUIExtended;
 
@@ -24,7 +23,7 @@ public class MoviesActivity extends DaggerAppCompatActivity {
 
     // Class attributes ****************************************************************************
     @Inject
-    IAntiTampering antiTampering;
+    ISecurityManager securityManager;
 
     @Inject
     IMoviesNavigator moviesNavigator;
@@ -40,11 +39,9 @@ public class MoviesActivity extends DaggerAppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!BuildConfig.DEBUG && BuildConfig.FLAVOR.equals("prod")) {
-            if (this.antiTampering.isAppTampered()) {
-                this.finishAndRemoveTask();
-                return;
-            }
+        if (!this.securityManager.canAppExecute()) {
+            this.finishAndRemoveTask();
+            return;
         }
 
         this.setContentView(R.layout.movies_activity);
