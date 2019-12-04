@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,15 +21,16 @@ import com.lorenzorigato.movies.databinding.SearchFragmentBinding;
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerFragment;
-import timber.log.Timber;
 
 public class SearchFragment extends DaggerFragment {
 
+
+    // Class attributes ****************************************************************************
     @Inject
     SearchViewModel searchViewModel;
 
-    private String query = null;
 
+    // Class methods *******************************************************************************
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,13 +59,29 @@ public class SearchFragment extends DaggerFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        setTitle(this.query);
+    public void onStart() {
+        super.onStart();
+        this.searchViewModel.getStatus().observe(this, this::handleStatusChanged);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setTitle(this.searchViewModel.getGenreName().getValue());
+    }
+
+
+    // Private class methods ***********************************************************************
     private NavController getNavController() {
         return NavHostFragment.findNavController(this);
+    }
+
+    private void handleStatusChanged(com.lorenzorigato.movies.ui.search.SearchView.Status status) {
+        switch (status) {
+            case INVALID_GENRE_ERROR:
+                Toast.makeText(getActivity(), R.string.search_invalid_genre_error, Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     private void setupSearchView(SearchView searchView, MenuItem searchMenuItem) {
@@ -73,6 +91,7 @@ public class SearchFragment extends DaggerFragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+                SearchFragment.this.searchViewModel.onQuerySubmitted(query);
                 return false;
             }
 
@@ -91,14 +110,13 @@ public class SearchFragment extends DaggerFragment {
 
             @Override
             public boolean onSuggestionClick(int position) {
-                Timber.w("position: " + position);
-                SearchFragment.this.query = "Adventure";
-                SearchFragment.this.setTitle("Adventure");
+                SearchFragment.this.searchViewModel.onSuggestionClicked(position);
                 searchMenuItem.collapseActionView();
                 return false;
             }
         });
 
+        this.searchViewModel.getGenreName().observe(this, SearchFragment.this::setTitle);
         this.searchViewModel.getSuggestions().observe(this, adapter::setSuggestions);
     }
 
