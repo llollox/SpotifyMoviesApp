@@ -1,9 +1,6 @@
 package com.lorenzorigato.movies.ui.search;
 
-import android.database.Cursor;
-import android.database.MatrixCursor;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,8 +11,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.cursoradapter.widget.CursorAdapter;
-import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -27,6 +22,8 @@ import timber.log.Timber;
 
 public class SearchFragment extends Fragment {
 
+    private String query = null;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +33,9 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.search_actions, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-        this.setupSearchView(searchView, searchItem);
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        this.setupSearchView(searchView, searchMenuItem);
     }
 
     @Nullable
@@ -54,34 +51,41 @@ public class SearchFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setTitle(this.query);
+    }
+
     private NavController getNavController() {
         return NavHostFragment.findNavController(this);
     }
 
-    private void setupSearchView(SearchView searchView, MenuItem searchItem) {
-        final String[] from = new String[] {"name"};
-        final int[] to = new int[] {android.R.id.text1};
-        CursorAdapter adapter = new SimpleCursorAdapter(getActivity(),
-                android.R.layout.simple_list_item_1,
-                null,
-                from,
-                to,
-                CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-
-
+    private void setupSearchView(SearchView searchView, MenuItem searchMenuItem) {
+        SearchViewCursorAdapter adapter = new SearchViewCursorAdapter(getActivity());
         searchView.setSuggestionsAdapter(adapter);
-
-        // Set on text changed listener
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Text has changed, apply filtering?
                 return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                // Perform search
+            public boolean onQueryTextChange(String string) {
+                if (string.length() <= 2) {
+                    return false;
+                }
+
+                if (string.length() == 3) {
+                    String[] array = {"Prova", "Action", "Adventure", "Test", "War", "Science Fiction", "Fantasy", "Another Genre"};
+                    adapter.setSuggestions(array);
+                }
+                else {
+                    String[] array = {"Prova", "Action", "Adventure"};
+                    adapter.setSuggestions(array);
+                }
+
                 return false;
             }
         });
@@ -95,55 +99,18 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onSuggestionClick(int position) {
                 Timber.w("position: " + position);
-
-                getActivity().setTitle("Prova");
-                searchItem.collapseActionView();
-                return true;
-            }
-        });
-
-        searchView.setOnQueryTextListener(getOnQueryTextListener(adapter));
-    }
-
-    private SearchView.OnQueryTextListener getOnQueryTextListener(CursorAdapter adapter) {
-        return new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
+                SearchFragment.this.query = "Adventure";
+                SearchFragment.this.setTitle("Adventure");
+                searchMenuItem.collapseActionView();
                 return false;
             }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                if (s.length() <= 2) {
-                    return false;
-                }
-
-                if (s.length() == 3) {
-                    String[] array = {"Prova", "Action", "Adventure", "Test", "War", "Science Fiction", "Fantasy", "Another Genre"};
-                    setSuggestions(array, adapter);
-                }
-                else {
-                    String[] array = {"Prova", "Action", "Adventure"};
-                    setSuggestions(array, adapter);
-                }
-
-                return true;
-            }
-        };
+        });
     }
 
-    private void setSuggestions(String[] suggestions, CursorAdapter adapter) {
-        Cursor cursor = createCursorFromResult(suggestions);
-        adapter.swapCursor(cursor);
-    }
-
-    private Cursor createCursorFromResult(String[] strings)  {
-        final MatrixCursor cursor = new MatrixCursor(new String[]{ BaseColumns._ID, "name" });
-        for (int i=0; i<strings.length; i++) {
-            String s = strings[i];
-            cursor.addRow(new Object[] {i, s});
+    private void setTitle(String query) {
+        String title = query == null ? getString(R.string.search) : query;
+        if (getActivity() != null) {
+            getActivity().setTitle(title);
         }
-
-        return cursor;
     }
 }

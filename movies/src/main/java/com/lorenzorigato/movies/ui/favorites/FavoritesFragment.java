@@ -16,7 +16,16 @@ public class FavoritesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getActivity().setTitle(R.string.favorites);
         View view = inflater.inflate(R.layout.favorites_fragment, container, false);
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (getActivity() != null) {
+            getActivity().setTitle(R.string.favorites);
+        }
     }
 }

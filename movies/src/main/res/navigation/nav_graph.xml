@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/search_fragment_dest"
         android:name="com.lorenzorigato.movies.ui.search.SearchFragment"
-        android:label="@string/search"
         tools:layout="@layout/search_fragment">
 
         <action
@@ -19,13 +18,11 @@
     <fragment
         android:id="@+id/detail_fragment_dest"
         android:name="com.lorenzorigato.movies.ui.detail.DetailFragment"
-        android:label="DetailFragment"
         tools:layout="@layout/detail_fragment"/>
 
     <fragment
         android:id="@+id/favorites_fragment_dest"
         android:name="com.lorenzorigato.movies.ui.favorites.FavoritesFragment"
-        android:label="@string/favorites"
         tools:layout="@layout/favorites_fragment"/>
 
 </navigation>
