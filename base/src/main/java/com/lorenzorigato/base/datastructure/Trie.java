@@ -1,6 +1,11 @@
 package com.lorenzorigato.base.datastructure;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A Trie (also called Prefix Tree) is a data structure that
@@ -58,6 +63,20 @@ public class Trie {
         return this.root.getChildren().isEmpty();
     }
 
+
+    public List<String> startsWith(String prefix) {
+        TrieNode childNode = this.getNode(this.root, prefix.toCharArray(), 0);
+        if (childNode == null) {
+            return new ArrayList<>();
+        }
+
+        Set<String> strings = new HashSet<>();
+        this.getLeafStringsDfs(childNode, new StringBuilder(prefix), strings);
+        List<String> list = new ArrayList<>(strings);
+        Collections.sort(list);
+        return list;
+    }
+
     /**
      * Given a string as input, this method checks if that string is contained in the Trie or not.
      * The time and space complexity for this operation is O(K), where K is the length of the string as input.
@@ -66,19 +85,34 @@ public class Trie {
      * @return if the string is contained in the Trie or not
      */
     public boolean search(String string) {
-        return search(this.root, string.toCharArray(), 0);
+        TrieNode childNode = this.getNode(this.root, string.toCharArray(), 0);
+        return childNode != null && childNode.isEndOfWord();
     }
 
 
     // Private class methods ***********************************************************************
-    private boolean search(TrieNode node, char[] charArray, int index) {
+    private TrieNode getNode(TrieNode node, char[] charArray, int index) {
         if (index == charArray.length) {
-            return node.isEndOfWord();
+            return node;
         }
 
         char childChar = charArray[index];
         TrieNode childNode = node.getChildren().get(childChar);
 
-        return childNode != null && search(childNode, charArray, index + 1);
+        return childNode == null ? null : getNode(childNode, charArray, index + 1);
+    }
+
+    private void getLeafStringsDfs(TrieNode node, StringBuilder sb, Set<String> words) {
+        if (node.isEndOfWord()) {
+            words.add(sb.toString());
+        }
+
+        for (HashMap.Entry<Character, TrieNode> entry : node.getChildren().entrySet()) {
+            char c = entry.getKey();
+            sb.append(c);
+            TrieNode childNode = entry.getValue();
+            getLeafStringsDfs(childNode, sb, words);
+            sb.deleteCharAt(sb.length() - 1);
+        }
     }
 }
