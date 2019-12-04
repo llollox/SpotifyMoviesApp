@@ -15,17 +15,16 @@ import java.util.Set;
  * (Very useful to implement an autocomplete).
  *
  * @property root The root of the Trie. It doesn't corresponds to any character.
- * @constructor Initialize the Trie with the strings passed as argument. By default the Trie is initialized with no strings.
+ * @constructor Initialize the Trie with the strings passed as argument.
  */
 public class Trie {
 
 
     // Private class attributes ********************************************************************
     private TrieNode root = new TrieNode();
-    private boolean isCaseSensitive = true;
 
 
-    // Constructor *********************************************************************************
+    // Constructors ********************************************************************************
     public Trie(List<String> strings) {
         for (String string : strings) {
             insert(string);
@@ -36,16 +35,6 @@ public class Trie {
         this(Arrays.asList(strings));
     }
 
-    public Trie(List<String> strings, boolean isCaseSensitive) {
-        this.isCaseSensitive = isCaseSensitive;
-        for (String string : strings) {
-            insert(string);
-        }
-    }
-
-    public Trie(String[] strings, boolean isCaseSensitive) {
-        this(Arrays.asList(strings), isCaseSensitive);
-    }
 
     // Class methods *******************************************************************************
     /**
@@ -55,11 +44,9 @@ public class Trie {
      */
     public void insert(String string) {
 
-        String inserted = this.isCaseSensitive ? string : string.toLowerCase();
-
         TrieNode node = this.root;
 
-        for(char c : inserted.toCharArray()) {
+        for(char c : string.toCharArray()) {
             TrieNode childNode = node.getChildren().get(c);
             if (childNode == null) {
                 childNode = new TrieNode();
@@ -72,25 +59,37 @@ public class Trie {
         node.setEndOfWord(true);
     }
 
+    /**
+     * This method verifies if the trie contains at least one string
+     *
+     * @return if the trie contains at least one string
+     */
     public boolean isEmpty() {
         return this.root.getChildren().isEmpty();
     }
 
-
+    /**
+     * This is an overload of the method startsWith(String prefix, int maxDistance)
+     * passing 0 as maxDistance.
+     *
+     * @param prefix the prefix to search.
+     * @return the list of strings that matches the prefix
+     */
     public List<String> startsWith(String prefix) {
-        TrieNode childNode = this.getNode(this.root, prefix.toCharArray(), 0);
-        if (childNode == null) {
-            return new ArrayList<>();
-        }
-
-        Set<String> strings = this.getLeafStrings(childNode, prefix);
-        List<String> list = new ArrayList<>(strings);
-        Collections.sort(list);
-
-        return list;
+        return this.startsWith(prefix, 0);
     }
 
-
+    /**
+     * This method finds all the strings that matches the prefix.
+     * It tries also to change the prefix in order to support any user's input errors.
+     * A change is an edit into the string: deletion, insertion, replacement. (Levensthein distance)
+     * A prefix is considered valid if the number of changes is less then or equal maxDistance.
+     *
+     * @param prefix the prefix to search.
+     * @param maxDistance the max number of errors between the prefix passed as argument
+     *                    and the prefix found traversing the trie.
+     * @return all the strings that matches the prefix.
+     */
     public List<String> startsWith(String prefix, int maxDistance) {
         Map<TrieNode, String> selected = new HashMap<>();
         this.levenstheinDistanceDfs(this.root, new StringBuilder(prefix), 0, selected, 0, maxDistance);
@@ -120,15 +119,15 @@ public class Trie {
         return childNode != null && childNode.isEndOfWord();
     }
 
-    public Set<String> getLeafStrings(TrieNode node, String prefix) {
+
+    // Private class methods ***********************************************************************
+    private Set<String> getLeafStrings(TrieNode node, String prefix) {
         Set<String> strings = new HashSet<>();
         StringBuilder sb = new StringBuilder(prefix);
         this.leafStringsDfs(node, sb, strings);
         return strings;
     }
 
-
-    // Private class methods ***********************************************************************
     private TrieNode getNode(TrieNode node, char[] charArray, int index) {
         if (index == charArray.length) {
             return node;
