@@ -91,8 +91,11 @@ public class Trie {
      * @return all the strings that matches the prefix.
      */
     public List<String> startsWith(String prefix, int maxDistance) {
+        String fixPrefix = prefix == null ? "" : prefix;
+        int fixMaxDistance = maxDistance < 0 ? 0 : maxDistance;
+
         Map<TrieNode, String> selected = new HashMap<>();
-        this.levenstheinDistanceDfs(this.root, new StringBuilder(prefix), 0, selected, 0, maxDistance);
+        this.levenstheinDistanceDfs(this.root, new StringBuilder(fixPrefix), 0, selected, 0, fixMaxDistance);
 
         Set<String> strings = new HashSet<>();
         for (Map.Entry<TrieNode, String> entry : selected.entrySet()) {
@@ -174,7 +177,6 @@ public class Trie {
             // Character found.
             // Continue without incrementing distance
             levenstheinDistanceDfs(nextNode, prefix, index + 1, selected, distance, maxDistance);
-            return;
         }
 
         // Try edit distance cases for each child:

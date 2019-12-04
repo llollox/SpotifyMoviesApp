@@ -11,16 +11,21 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.lorenzorigato.movies.R;
 import com.lorenzorigato.movies.databinding.SearchFragmentBinding;
 
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerFragment;
 import timber.log.Timber;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends DaggerFragment {
+
+    @Inject
+    SearchViewModel searchViewModel;
 
     private String query = null;
 
@@ -73,19 +78,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String string) {
-                if (string.length() <= 2) {
-                    return false;
-                }
-
-                if (string.length() == 3) {
-                    String[] array = {"Prova", "Action", "Adventure", "Test", "War", "Science Fiction", "Fantasy", "Another Genre"};
-                    adapter.setSuggestions(array);
-                }
-                else {
-                    String[] array = {"Prova", "Action", "Adventure"};
-                    adapter.setSuggestions(array);
-                }
-
+                SearchFragment.this.searchViewModel.onQueryChanged(string);
                 return false;
             }
         });
@@ -105,6 +98,8 @@ public class SearchFragment extends Fragment {
                 return false;
             }
         });
+
+        this.searchViewModel.getSuggestions().observe(this, adapter::setSuggestions);
     }
 
     private void setTitle(String query) {

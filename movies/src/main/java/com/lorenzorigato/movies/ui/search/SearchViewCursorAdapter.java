@@ -8,6 +8,8 @@ import android.provider.BaseColumns;
 import androidx.cursoradapter.widget.CursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 
+import java.util.List;
+
 public class SearchViewCursorAdapter extends SimpleCursorAdapter {
 
 
@@ -23,17 +25,17 @@ public class SearchViewCursorAdapter extends SimpleCursorAdapter {
 
 
     // Class methods *******************************************************************************
-    public void setSuggestions(String[] suggestions) {
+    public void setSuggestions(List<String> suggestions) {
         Cursor cursor = createCursorFromResult(suggestions);
         this.swapCursor(cursor);
     }
 
 
     // Private class methods ***********************************************************************
-    private Cursor createCursorFromResult(String[] strings)  {
+    private Cursor createCursorFromResult(List<String> strings)  {
         final MatrixCursor cursor = new MatrixCursor(new String[]{ BaseColumns._ID, "name" });
-        for (int i=0; i<strings.length; i++) {
-            String s = strings[i];
+        for (int i=0; i<strings.size(); i++) {
+            String s = strings.get(i);
             cursor.addRow(new Object[] {i, s});
         }
 

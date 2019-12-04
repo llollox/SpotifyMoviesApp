@@ -191,4 +191,20 @@ public class TrieStartsWithDistanceUnitTest {
         Assert.assertEquals("Action", output.get(0));
         Assert.assertEquals("Action Power", output.get(1));
     }
+
+    @Test
+    public void withTwoChars__shouldReturnActionAndActionPower() {
+        String[] strings = {"Action", "Adventure", "Animation",
+                "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "History",
+                "Horror", "Music", "Mystery", "Romance", "Science Fiction", "TV Movie",
+                "Thriller", "War", "Western"};
+
+        Trie trie = new Trie(strings);
+        List<String> output = trie.startsWith("Act", 2);
+        Assert.assertEquals(4, output.size());
+        Assert.assertEquals("Action", output.get(0));
+        Assert.assertEquals("Adventure", output.get(1));
+        Assert.assertEquals("Animation", output.get(2));
+        Assert.assertEquals("Science Fiction", output.get(3));
+    }
 }
