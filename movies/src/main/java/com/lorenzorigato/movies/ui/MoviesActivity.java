@@ -3,15 +3,15 @@ package com.lorenzorigato.movies.ui;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.navigation.NavigationView;
 import com.lorenzorigato.base.security.ISecurityManager;
 import com.lorenzorigato.movies.R;
+import com.lorenzorigato.movies.databinding.MoviesActivityBinding;
 import com.lorenzorigato.movies.ui.util.NavigationUIExtended;
 
 import javax.inject.Inject;
@@ -30,8 +30,8 @@ public class MoviesActivity extends DaggerAppCompatActivity {
 
 
     // Private class attributes ********************************************************************
-    private DrawerLayout drawerLayout;
     private AppBarConfiguration appBarConfiguration;
+    private MoviesActivityBinding binding;
 
 
     // Class methods *******************************************************************************
@@ -44,7 +44,7 @@ public class MoviesActivity extends DaggerAppCompatActivity {
             return;
         }
 
-        this.setContentView(R.layout.movies_activity);
+        this.binding = DataBindingUtil.setContentView(this, R.layout.movies_activity);
         this.setupNavigationDrawer();
         this.setupActionBar();
     }
@@ -62,11 +62,9 @@ public class MoviesActivity extends DaggerAppCompatActivity {
     }
 
     private void setupNavigationDrawer() {
-        this.drawerLayout = findViewById(R.id.drawer_layout);
-        this.drawerLayout.setStatusBarBackground(R.color.colorPrimaryDark);
+        this.binding.drawerLayout.setStatusBarBackground(R.color.colorPrimaryDark);
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        NavigationUIExtended.setupWithNavController(navigationView, getNavController(), item -> {
+        NavigationUIExtended.setupWithNavController(this.binding.navView, getNavController(), item -> {
             if (item.getItemId() == R.id.action_about) {
                 MoviesActivity.this.moviesNavigator.goToAbout(MoviesActivity.this);
                 return true;
@@ -76,11 +74,11 @@ public class MoviesActivity extends DaggerAppCompatActivity {
     }
 
     private void setupActionBar() {
-        setSupportActionBar(findViewById(R.id.toolbar));
+        setSupportActionBar(this.binding.toolbar);
 
         this.appBarConfiguration =
                 new AppBarConfiguration.Builder(R.id.search_fragment_dest, R.id.favorites_fragment_dest)
-                        .setDrawerLayout(drawerLayout)
+                        .setDrawerLayout(this.binding.drawerLayout)
                         .build();
 
         NavigationUI.setupActionBarWithNavController(this, getNavController(), this.appBarConfiguration);
