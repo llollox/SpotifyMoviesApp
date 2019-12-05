@@ -8,6 +8,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface GenreService {
-    @GET("genres")
+    @GET("genres.json")
     Call<List<Genre>> getAll();
 }

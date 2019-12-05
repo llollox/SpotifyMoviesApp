@@ -26,14 +26,9 @@ public class SearchViewModel extends ViewModel {
 
 
     // Private class attributes ********************************************************************
-    private String[] genres = {"Action", "Adventure", "Animation",
-            "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "History",
-            "Horror", "Music", "Mystery", "Romance", "Science Fiction", "TV Movie",
-            "Thriller", "War", "Western"};
-
     private IGenreRepository genreRepository;
     private IMovieRepository movieRepository;
-    private Trie trie = new Trie(this.genres);
+    private Trie trie = new Trie(new ArrayList<>());
     private MutableLiveData<String> genreName = new MutableLiveData<>();
     private MutableLiveData<List<String>> suggestions = new MutableLiveData<>(new ArrayList<>());
     private SingleLiveData<SearchView.Status> status = new SingleLiveData<>();

@@ -11,6 +11,7 @@ import com.lorenzorigato.base.model.datasource.remote.MovieRemoteDataSource;
 import com.lorenzorigato.base.model.datasource.remote.interfaces.IGenreRemoteDataSource;
 import com.lorenzorigato.base.model.datasource.remote.interfaces.IMovieRemoteDataSource;
 import com.lorenzorigato.base.network.component.interfaces.IReachabilityChecker;
+import com.lorenzorigato.base.network.service.GenreService;
 
 import dagger.Module;
 import dagger.Provides;
@@ -26,8 +27,8 @@ public class DataSourceModule {
 
     @ApplicationScope
     @Provides
-    public static IGenreRemoteDataSource providesGenreRemoteDataSource(IReachabilityChecker reachabilityChecker) {
-        return new GenreRemoteDataSource(reachabilityChecker);
+    public static IGenreRemoteDataSource providesGenreRemoteDataSource(GenreService genreService, IReachabilityChecker reachabilityChecker) {
+        return new GenreRemoteDataSource(genreService, reachabilityChecker);
     }
 
     @ApplicationScope
