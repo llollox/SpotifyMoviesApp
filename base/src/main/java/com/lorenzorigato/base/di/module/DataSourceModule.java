@@ -17,7 +17,7 @@ import com.lorenzorigato.base.network.service.MovieService;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = {NetworkModule.class})
+@Module(includes = {NetworkModule.class, DatabaseModule.class})
 public class DataSourceModule {
 
     @ApplicationScope
