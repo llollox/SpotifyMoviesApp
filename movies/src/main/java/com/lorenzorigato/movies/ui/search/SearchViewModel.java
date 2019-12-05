@@ -80,11 +80,6 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void onLoadMore() {
-        if (this.genreName.getValue() == null) {
-            // No genre to load;
-            return;
-        }
-
         List<Movie> currentMovies = this.movies.getValue();
         int offset = currentMovies != null ? currentMovies.size() : 0;
 

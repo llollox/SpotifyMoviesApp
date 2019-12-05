@@ -67,7 +67,9 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
         Paginate.Callbacks callbacks = new Paginate.Callbacks() {
             @Override
             public void onLoadMore() {
-                SearchFragment.this.viewModel.onLoadMore();
+                if (recyclerView.computeVerticalScrollOffset() > 0) {
+                    SearchFragment.this.viewModel.onLoadMore();
+                }
             }
 
             @Override
