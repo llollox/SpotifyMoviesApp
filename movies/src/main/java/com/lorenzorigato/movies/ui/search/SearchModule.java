@@ -2,6 +2,8 @@ package com.lorenzorigato.movies.ui.search;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import com.lorenzorigato.base.model.repository.IGenreRepository;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -9,7 +11,8 @@ import dagger.Provides;
 public class SearchModule {
 
     @Provides
-    public static SearchViewModel providesSearchViewModel(SearchFragment searchFragment) {
-        return ViewModelProviders.of(searchFragment).get(SearchViewModel.class);
+    public static SearchViewModel providesSearchViewModel(SearchFragment searchFragment, IGenreRepository genreRepository) {
+        SearchViewModelFactory factory = new SearchViewModelFactory(genreRepository);
+        return ViewModelProviders.of(searchFragment, factory).get(SearchViewModel.class);
     }
 }

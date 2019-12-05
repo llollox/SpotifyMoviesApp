@@ -5,4 +5,5 @@
 
     <!--  Errors  -->
     <string name="search_invalid_genre_error">Invalid genre</string>
+    <string name="search_error_genres_not_loaded">Something went wrong! Unable to load valid genres.</string>
 </resources>

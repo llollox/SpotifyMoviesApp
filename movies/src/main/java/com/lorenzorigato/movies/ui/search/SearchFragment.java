@@ -28,6 +28,9 @@ public class SearchFragment extends DaggerFragment {
     SearchViewModel searchViewModel;
 
 
+    private SearchFragmentBinding binding;
+
+
     // Class methods *******************************************************************************
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,11 +50,13 @@ public class SearchFragment extends DaggerFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        SearchFragmentBinding binding = SearchFragmentBinding.inflate(inflater, container, false);
+        this.binding = SearchFragmentBinding.inflate(inflater, container, false);
 
 //        binding.favoritesBtn.setOnClickListener(v -> {
 //            getNavController().navigate(R.id.action_search_fragment_dest_to_detail_fragment_dest);
 //        });
+
+        this.searchViewModel.getState().observe(this, this::handleStateChanged);
 
         return binding.getRoot();
     }
@@ -76,10 +81,16 @@ public class SearchFragment extends DaggerFragment {
 
     private void handleStatusChanged(com.lorenzorigato.movies.ui.search.SearchView.Status status) {
         switch (status) {
+            case GENRES_NOT_LOADED_ERROR:
+                Toast.makeText(getActivity(), R.string.search_error_genres_not_loaded, Toast.LENGTH_SHORT).show();
             case INVALID_GENRE_ERROR:
                 Toast.makeText(getActivity(), R.string.search_invalid_genre_error, Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void handleStateChanged(com.lorenzorigato.movies.ui.search.SearchView.State state) {
+        this.binding.setState(state);
     }
 
     private void setupSearchView(SearchView searchView, MenuItem searchMenuItem) {

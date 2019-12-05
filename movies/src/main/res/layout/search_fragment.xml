@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="state"
+            type="com.lorenzorigato.movies.ui.search.SearchView.State" />
     </data>
 
     <LinearLayout
@@ -12,7 +15,10 @@
 
         <include
             android:id="@+id/view_movie_list_layout"
-            layout="@layout/view_movies_list" />
+            layout="@layout/view_movies_list"
+            bind:isProgressBarVisible="@{state.loadingVisible}"
+            bind:isEmptyTextViewVisible="@{state.emptyTextViewVisible}"
+            bind:isRecyclerViewVisible="@{state.recyclerViewVisible}"/>
 
     </LinearLayout>
 </layout>

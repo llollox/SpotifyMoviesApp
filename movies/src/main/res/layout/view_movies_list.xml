@@ -2,6 +2,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+        <variable
+            name="isRecyclerViewVisible"
+            type="Boolean" />
+
+        <variable
+            name="isProgressBarVisible"
+            type="Boolean" />
+
+        <variable
+            name="isEmptyTextViewVisible"
+            type="Boolean" />
+
+        <import type="android.view.View" />
     </data>
 
     <FrameLayout
@@ -11,14 +24,16 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/movieList_recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="@{isRecyclerViewVisible ? View.VISIBLE : View.GONE}"/>
 
         <ProgressBar
             android:id="@+id/movieList_progressBar"
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:visibility="@{isProgressBarVisible ? View.VISIBLE : View.GONE}"/>
 
         <TextView
             android:id="@+id/movieList_emptyPlaceHolder__textView"
@@ -30,6 +45,7 @@
             android:gravity="center"
             android:text="@string/search_empty_place_holder"
             android:textColor="@color/colorTextPrimary"
-            android:textSize="@dimen/text_size_large" />
+            android:textSize="@dimen/text_size_large"
+            android:visibility="@{isEmptyTextViewVisible ? View.VISIBLE : View.GONE}"/>
     </FrameLayout>
 </layout>
