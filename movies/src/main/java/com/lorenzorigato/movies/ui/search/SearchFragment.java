@@ -19,12 +19,11 @@ import com.lorenzorigato.movies.R;
 import com.lorenzorigato.movies.databinding.SearchFragmentBinding;
 import com.lorenzorigato.movies.ui.component.movielist.MovieAdapter;
 import com.lorenzorigato.movies.ui.component.movielist.MovieViewHolder;
-
+import com.paginate.Paginate;
 import javax.inject.Inject;
-
 import dagger.android.support.DaggerFragment;
 
-public class SearchFragment extends DaggerFragment implements MovieAdapter.Listener {
+public class SearchFragment extends DaggerFragment implements MovieAdapter.Listener{
 
 
     // Class attributes ****************************************************************************
@@ -64,6 +63,28 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
         RecyclerView recyclerView = this.binding.viewMovieListLayout.movieListRecyclerView;
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerView.setAdapter(adapter);
+
+        Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+            @Override
+            public void onLoadMore() {
+                SearchFragment.this.viewModel.onLoadMore();
+            }
+
+            @Override
+            public boolean isLoading() {
+                return SearchFragment.this.viewModel.isUpdateMoviesRunning();
+            }
+
+            @Override
+            public boolean hasLoadedAllItems() {
+                return SearchFragment.this.viewModel.hasLoadedAllMovies();
+            }
+        };
+
+        Paginate.with(recyclerView, callbacks)
+            .setLoadingTriggerThreshold(6)
+            .addLoadingListItem(true)
+            .build();
 
         this.viewModel.getLayouts().observe(this, adapter::submitList);
         this.viewModel.getState().observe(this, this::handleStateChanged);

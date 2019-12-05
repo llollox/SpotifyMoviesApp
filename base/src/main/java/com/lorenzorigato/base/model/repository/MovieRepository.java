@@ -37,6 +37,11 @@ public class MovieRepository implements IMovieRepository {
 
     // IMovieRepository methods ********************************************************************
     @Override
+    public boolean isUpdateByGenreRunning() {
+        return isUpdateByGenreRunning;
+    }
+
+    @Override
     public LiveData<List<Movie>> findByIds(List<Integer> ids) {
         return this.localDataSource.findByIds(ids);
     }

@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface IMovieRepository {
 
+    boolean isUpdateByGenreRunning();
+
     LiveData<List<Movie>> findByIds(List<Integer> ids);
 
     interface UpdateByGenreCallback {

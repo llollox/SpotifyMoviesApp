@@ -63,6 +63,10 @@ public class SearchViewModel extends ViewModel {
 
 
     // Class methods *******************************************************************************
+    public boolean hasLoadedAllMovies() { return this._hasLoadedAllMovies; }
+
+    public boolean isUpdateMoviesRunning() { return this.movieRepository.isUpdateByGenreRunning(); }
+
     public LiveData<String> getGenreName() { return this.genreName; }
 
     public LiveData<SearchView.State> getState() { return this.state; }
@@ -76,6 +80,11 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void onLoadMore() {
+        if (this.genreName.getValue() == null) {
+            // No genre to load;
+            return;
+        }
+
         List<Movie> currentMovies = this.movies.getValue();
         int offset = currentMovies != null ? currentMovies.size() : 0;
 
