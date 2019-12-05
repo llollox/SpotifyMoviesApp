@@ -17,7 +17,7 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
         private boolean isFavorite;
         private boolean isTop;
 
-        public Layout(int id, String posterUrl, boolean isFavorite, boolean isTop) {
+        public Layout(int id, String posterUrl, boolean isTop, boolean isFavorite) {
             this.id = id;
             this.posterUrl = posterUrl;
             this.isFavorite = isFavorite;
