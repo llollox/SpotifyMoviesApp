@@ -1,6 +1,7 @@
 package com.lorenzorigato.base.model.datasource.remote;
 
 import com.lorenzorigato.base.components.util.AsyncCallback;
+import com.lorenzorigato.base.config.interfaces.IConfiguration;
 import com.lorenzorigato.base.model.datasource.remote.interfaces.IMovieRemoteDataSource;
 import com.lorenzorigato.base.model.entity.Movie;
 import com.lorenzorigato.base.network.component.interfaces.IReachabilityChecker;
@@ -14,11 +15,13 @@ public class MovieRemoteDataSource implements IMovieRemoteDataSource {
 
     // Private class attributes ********************************************************************
     private IReachabilityChecker reachabilityChecker;
+    private IConfiguration configuration;
 
 
     // Constructor *********************************************************************************
-    public MovieRemoteDataSource(IReachabilityChecker reachabilityChecker) {
+    public MovieRemoteDataSource(IReachabilityChecker reachabilityChecker, IConfiguration configuration) {
         this.reachabilityChecker = reachabilityChecker;
+        this.configuration = configuration;
     }
 
 
@@ -34,8 +37,8 @@ public class MovieRemoteDataSource implements IMovieRemoteDataSource {
 
         if (callback != null) {
             ArrayList<Movie> movies = new ArrayList<>();
-            movies.add(new Movie(1, "Prova", 5.6, "/system/pictures/photos/000/000/323/thumb/open-uri20191202-4543-1si1cvh?1575302497"));
-            movies.add(new Movie(1, "Prova2", 8.6, "/system/pictures/photos/000/000/323/medium/open-uri20191202-4543-1si1cvh?1575302497"));
+            movies.add(new Movie(1, "Prova", 5.6, "https://image.tmdb.org/t/p/w342/5ig0kdWz5kxR4PHjyCgyI5khCzd.jpg"));
+            movies.add(new Movie(1, "Prova2", 8.6, "https://image.tmdb.org/t/p/w342/5ig0kdWz5kxR4PHjyCgyI5khCzd.jpg"));
             FetchMoviesResponse response = new FetchMoviesResponse(movies, 1);
             callback.onCompleted(null, response);
         }
@@ -49,6 +52,6 @@ public class MovieRemoteDataSource implements IMovieRemoteDataSource {
                 movieDTO.getId(),
                 movieDTO.getTitle(),
                 movieDTO.getRating(),
-                movieDTO.getCover().getMedium());
+                this.configuration.getServerUrl() + movieDTO.getCover().getMedium().substring(1));
     }
 }

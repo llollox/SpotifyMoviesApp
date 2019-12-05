@@ -1,5 +1,6 @@
 package com.lorenzorigato.base.di.module;
 
+import com.lorenzorigato.base.config.interfaces.IConfiguration;
 import com.lorenzorigato.base.di.scope.ApplicationScope;
 import com.lorenzorigato.base.model.datasource.local.GenreLocalDataSource;
 import com.lorenzorigato.base.model.datasource.local.MovieLocalDataSource;
@@ -37,7 +38,7 @@ public class DataSourceModule {
 
     @ApplicationScope
     @Provides
-    public static IMovieRemoteDataSource providesMovieRemoteDataSource(IReachabilityChecker reachabilityChecker) {
-        return new MovieRemoteDataSource(reachabilityChecker);
+    public static IMovieRemoteDataSource providesMovieRemoteDataSource(IReachabilityChecker reachabilityChecker, IConfiguration configuration) {
+        return new MovieRemoteDataSource(reachabilityChecker, configuration);
     }
 }
