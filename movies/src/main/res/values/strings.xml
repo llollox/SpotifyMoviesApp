@@ -1,8 +1,4 @@
 <resources>
-    <string name="search">Search</string>
     <string name="favorites">Favorites</string>
     <string name="about">About</string>
-
-    <!--  Search Errors  -->
-    <string name="search_invalid_genre_error">Invalid genre</string>
 </resources>

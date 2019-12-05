@@ -12,8 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.lorenzorigato.movies.R;
 import com.lorenzorigato.movies.databinding.SearchFragmentBinding;
@@ -51,9 +49,9 @@ public class SearchFragment extends DaggerFragment {
 
         SearchFragmentBinding binding = SearchFragmentBinding.inflate(inflater, container, false);
 
-        binding.favoritesBtn.setOnClickListener(v -> {
-            getNavController().navigate(R.id.action_search_fragment_dest_to_detail_fragment_dest);
-        });
+//        binding.favoritesBtn.setOnClickListener(v -> {
+//            getNavController().navigate(R.id.action_search_fragment_dest_to_detail_fragment_dest);
+//        });
 
         return binding.getRoot();
     }
@@ -72,9 +70,9 @@ public class SearchFragment extends DaggerFragment {
 
 
     // Private class methods ***********************************************************************
-    private NavController getNavController() {
-        return NavHostFragment.findNavController(this);
-    }
+//    private NavController getNavController() {
+//        return NavHostFragment.findNavController(this);
+//    }
 
     private void handleStatusChanged(com.lorenzorigato.movies.ui.search.SearchView.Status status) {
         switch (status) {
