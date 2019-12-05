@@ -5,44 +5,80 @@ import com.lorenzorigato.base.config.interfaces.IConfiguration;
 import com.lorenzorigato.base.model.datasource.remote.interfaces.IMovieRemoteDataSource;
 import com.lorenzorigato.base.model.entity.Movie;
 import com.lorenzorigato.base.network.component.interfaces.IReachabilityChecker;
+import com.lorenzorigato.base.network.error.NetworkRequestError;
 import com.lorenzorigato.base.network.error.NoInternetError;
+import com.lorenzorigato.base.network.service.MovieService;
 import com.lorenzorigato.base.network.service.dto.MovieDTO;
+import com.lorenzorigato.base.network.service.envelope.MovieEnvelope;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MovieRemoteDataSource implements IMovieRemoteDataSource {
 
 
     // Private class attributes ********************************************************************
+    private MovieService movieService;
     private IReachabilityChecker reachabilityChecker;
     private IConfiguration configuration;
 
 
     // Constructor *********************************************************************************
-    public MovieRemoteDataSource(IReachabilityChecker reachabilityChecker, IConfiguration configuration) {
+    public MovieRemoteDataSource(
+            MovieService movieService,
+            IReachabilityChecker reachabilityChecker,
+            IConfiguration configuration) {
+        this.movieService = movieService;
         this.reachabilityChecker = reachabilityChecker;
         this.configuration = configuration;
     }
 
 
     @Override
-    public void fetchMovies(String genre, int offset, AsyncCallback<FetchMoviesResponse> callback) {
+    public void fetchMovies(String genre, int offset, int pageSize, AsyncCallback<FetchMoviesResponse> callback) {
         if (!this.reachabilityChecker.isInternetAvailable()) {
             if (callback != null) {
                 callback.onCompleted(new NoInternetError(), null);
             }
-
             return;
         }
 
-        if (callback != null) {
-            ArrayList<Movie> movies = new ArrayList<>();
-            movies.add(new Movie(1, "Prova", 5.6, "https://image.tmdb.org/t/p/w342/5ig0kdWz5kxR4PHjyCgyI5khCzd.jpg"));
-            movies.add(new Movie(1, "Prova2", 8.6, "https://image.tmdb.org/t/p/w342/5ig0kdWz5kxR4PHjyCgyI5khCzd.jpg"));
-            FetchMoviesResponse response = new FetchMoviesResponse(movies, 1);
-            callback.onCompleted(null, response);
-        }
+        this.movieService.getMovies(genre, offset, pageSize).enqueue(new Callback<MovieEnvelope>() {
+            @Override
+            public void onResponse(@NotNull Call<MovieEnvelope> call, @NotNull Response<MovieEnvelope> response) {
+                if (callback == null) {
+                    return;
+                }
 
+                if (response.isSuccessful() && response.body() != null) {
+                    List<MovieDTO> movieDTOs = response.body().getData();
+                    ArrayList<Movie> movies = new ArrayList<>();
+                    for (MovieDTO movieDTO : movieDTOs) {
+                        movies.add(mapToMovie(movieDTO));
+                    }
+
+                    int numTotalMovies = response.body().getMetadata().getTotal();
+                    FetchMoviesResponse fetchMoviesResponse = new FetchMoviesResponse(movies, numTotalMovies);
+                    callback.onCompleted(null, fetchMoviesResponse);
+                }
+                else {
+                    callback.onCompleted(new NetworkRequestError(), null);
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<MovieEnvelope> call, @NotNull Throwable t) {
+                if (callback != null) {
+                    callback.onCompleted(t, null);
+                }
+            }
+        });
     }
 
 

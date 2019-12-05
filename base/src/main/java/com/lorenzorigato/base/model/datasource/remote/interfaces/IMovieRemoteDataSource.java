@@ -28,5 +28,6 @@ public interface IMovieRemoteDataSource {
     void fetchMovies(
             String genre,
             int offset,
+            int pageSize,
             AsyncCallback<FetchMoviesResponse> callback);
 }

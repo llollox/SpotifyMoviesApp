@@ -8,7 +8,7 @@ import retrofit2.http.Query;
 
 public interface MovieService {
 
-    @GET("movies")
+    @GET("movies.json")
     Call<MovieEnvelope> getMovies(
             @Query("genre") String genre,
             @Query("offset") int offset,

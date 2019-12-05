@@ -16,6 +16,9 @@ import java.util.List;
 
 public class MovieRepository implements IMovieRepository {
 
+    // Static **************************************************************************************
+    private static final int NETWORK_PAGE_SIZE = 20;
+
 
     // Private class attributes ********************************************************************
     private IGenreRepository genreRepository;
@@ -92,7 +95,7 @@ public class MovieRepository implements IMovieRepository {
                 // Otherwise perform the network request to get the first page of movies
                 // and once the movies are retrieved, then save them into the database.
                 // Finally notify the caller.
-                this.remoteDataSource.fetchMovies(genreName, offset, (networkError, response) -> {
+                this.remoteDataSource.fetchMovies(genreName, offset, NETWORK_PAGE_SIZE, (networkError, response) -> {
                     if (networkError != null) {
                         this.isUpdateByGenreRunning = false;
 
