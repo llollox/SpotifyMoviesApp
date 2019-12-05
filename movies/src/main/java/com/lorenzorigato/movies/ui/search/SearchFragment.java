@@ -12,20 +12,24 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lorenzorigato.movies.R;
 import com.lorenzorigato.movies.databinding.SearchFragmentBinding;
+import com.lorenzorigato.movies.ui.component.movielist.MovieAdapter;
+import com.lorenzorigato.movies.ui.component.movielist.MovieViewHolder;
 
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerFragment;
 
-public class SearchFragment extends DaggerFragment {
+public class SearchFragment extends DaggerFragment implements MovieAdapter.Listener {
 
 
     // Class attributes ****************************************************************************
     @Inject
-    SearchViewModel searchViewModel;
+    SearchViewModel viewModel;
 
 
     private SearchFragmentBinding binding;
@@ -56,7 +60,13 @@ public class SearchFragment extends DaggerFragment {
 //            getNavController().navigate(R.id.action_search_fragment_dest_to_detail_fragment_dest);
 //        });
 
-        this.searchViewModel.getState().observe(this, this::handleStateChanged);
+        MovieAdapter adapter = new MovieAdapter(this);
+        RecyclerView recyclerView = this.binding.viewMovieListLayout.movieListRecyclerView;
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        recyclerView.setAdapter(adapter);
+
+        this.viewModel.getLayouts().observe(this, adapter::submitList);
+        this.viewModel.getState().observe(this, this::handleStateChanged);
 
         return binding.getRoot();
     }
@@ -64,13 +74,13 @@ public class SearchFragment extends DaggerFragment {
     @Override
     public void onStart() {
         super.onStart();
-        this.searchViewModel.getStatus().observe(this, this::handleStatusChanged);
+        this.viewModel.getStatus().observe(this, this::handleStatusChanged);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        setTitle(this.searchViewModel.getGenreName().getValue());
+        setTitle(this.viewModel.getGenreName().getValue());
     }
 
 
@@ -83,8 +93,14 @@ public class SearchFragment extends DaggerFragment {
         switch (status) {
             case GENRES_NOT_LOADED_ERROR:
                 Toast.makeText(getActivity(), R.string.search_error_genres_not_loaded, Toast.LENGTH_SHORT).show();
+                break;
+
             case INVALID_GENRE_ERROR:
                 Toast.makeText(getActivity(), R.string.search_invalid_genre_error, Toast.LENGTH_SHORT).show();
+                break;
+
+            case MOVIES_NOT_LOADED_ERROR:
+                Toast.makeText(getActivity(), R.string.search_error_movies_not_loaded, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -100,13 +116,13 @@ public class SearchFragment extends DaggerFragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                SearchFragment.this.searchViewModel.onQuerySubmitted(query);
+                SearchFragment.this.viewModel.onQuerySubmitted(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String string) {
-                SearchFragment.this.searchViewModel.onQueryChanged(string);
+                SearchFragment.this.viewModel.onQueryChanged(string);
                 return false;
             }
         });
@@ -119,14 +135,14 @@ public class SearchFragment extends DaggerFragment {
 
             @Override
             public boolean onSuggestionClick(int position) {
-                SearchFragment.this.searchViewModel.onSuggestionClicked(position);
+                SearchFragment.this.viewModel.onSuggestionClicked(position);
                 searchMenuItem.collapseActionView();
                 return false;
             }
         });
 
-        this.searchViewModel.getGenreName().observe(this, SearchFragment.this::setTitle);
-        this.searchViewModel.getSuggestions().observe(this, adapter::setSuggestions);
+        this.viewModel.getGenreName().observe(this, SearchFragment.this::setTitle);
+        this.viewModel.getSuggestions().observe(this, adapter::setSuggestions);
     }
 
     private void setTitle(String query) {
@@ -134,5 +150,12 @@ public class SearchFragment extends DaggerFragment {
         if (getActivity() != null) {
             getActivity().setTitle(title);
         }
+    }
+
+
+    // MovieAdapter.Listener methods ***************************************************************
+    @Override
+    public void onFavoriteButtonClicked(MovieViewHolder.Layout layout) {
+
     }
 }

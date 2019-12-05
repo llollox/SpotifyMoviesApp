@@ -1,4 +1,4 @@
-package com.lorenzorigato.base.model.repository;
+package com.lorenzorigato.base.model.repository.interfaces;
 
 import com.lorenzorigato.base.components.util.AsyncCallback;
 import com.lorenzorigato.base.model.entity.Genre;

@@ -3,7 +3,8 @@ package com.lorenzorigato.movies.ui.search;
 public interface SearchView {
     enum Status {
         GENRES_NOT_LOADED_ERROR,
-        INVALID_GENRE_ERROR
+        INVALID_GENRE_ERROR,
+        MOVIES_NOT_LOADED_ERROR
     }
 
     class State {

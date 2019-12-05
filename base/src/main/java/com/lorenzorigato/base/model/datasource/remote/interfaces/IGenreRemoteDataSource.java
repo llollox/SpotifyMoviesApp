@@ -1,4 +1,4 @@
-package com.lorenzorigato.base.model.datasource.remote;
+package com.lorenzorigato.base.model.datasource.remote.interfaces;
 
 import com.lorenzorigato.base.components.util.AsyncCallback;
 import com.lorenzorigato.base.model.entity.Genre;

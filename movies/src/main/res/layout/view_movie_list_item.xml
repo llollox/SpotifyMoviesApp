@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="layout"
+            type="com.lorenzorigato.movies.ui.component.movielist.MovieViewHolder.Layout" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/one_grid_unit"
+        tools:layout_width="@dimen/twenty_grid_unit">
+
+        <ImageView
+            android:id="@+id/imageView_movieListItem_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top"
+            android:adjustViewBounds="true"
+            bind:url="@{layout.posterUrl}"
+            tools:layout_height="224dp" />
+
+        <ImageView
+            android:id="@+id/imageView_movieListItem_star"
+            android:layout_width="@dimen/five_grid_unit"
+            android:layout_height="@dimen/five_grid_unit"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/two_grid_unit"
+            android:src="@drawable/ic_star"
+            android:visibility="@{layout.isTop ? View.VISIBLE : View.GONE}"
+            tools:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/imageView_movieListItem_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/seven_grid_unit"
+            android:adjustViewBounds="true"
+            android:src="@drawable/selector_favorite"
+            app:srcCompat="@drawable/selector_favorite" />
+    </FrameLayout>
+</layout>

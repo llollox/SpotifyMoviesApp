@@ -1,4 +1,4 @@
-package com.lorenzorigato.base.model.datasource.local;
+package com.lorenzorigato.base.model.datasource.local.interfaces;
 
 import com.lorenzorigato.base.components.util.AsyncCallback;
 import com.lorenzorigato.base.model.entity.Genre;

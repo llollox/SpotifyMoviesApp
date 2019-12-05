@@ -1,10 +1,11 @@
 package com.lorenzorigato.base.model.repository;
 
 import com.lorenzorigato.base.components.util.AsyncCallback;
-import com.lorenzorigato.base.model.datasource.local.IGenreLocalDataSource;
-import com.lorenzorigato.base.model.datasource.remote.IGenreRemoteDataSource;
+import com.lorenzorigato.base.model.datasource.local.interfaces.IGenreLocalDataSource;
+import com.lorenzorigato.base.model.datasource.remote.interfaces.IGenreRemoteDataSource;
 import com.lorenzorigato.base.model.entity.Genre;
 import com.lorenzorigato.base.model.error.TaskAlreadyRunningError;
+import com.lorenzorigato.base.model.repository.interfaces.IGenreRepository;
 
 import java.util.ArrayList;
 import java.util.List;

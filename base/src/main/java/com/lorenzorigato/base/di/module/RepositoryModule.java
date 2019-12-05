@@ -1,10 +1,14 @@
 package com.lorenzorigato.base.di.module;
 
 import com.lorenzorigato.base.di.scope.ApplicationScope;
-import com.lorenzorigato.base.model.datasource.local.IGenreLocalDataSource;
-import com.lorenzorigato.base.model.datasource.remote.IGenreRemoteDataSource;
+import com.lorenzorigato.base.model.datasource.local.interfaces.IGenreLocalDataSource;
+import com.lorenzorigato.base.model.datasource.local.interfaces.IMovieLocalDataSource;
+import com.lorenzorigato.base.model.datasource.remote.interfaces.IGenreRemoteDataSource;
+import com.lorenzorigato.base.model.datasource.remote.interfaces.IMovieRemoteDataSource;
 import com.lorenzorigato.base.model.repository.GenreRepository;
-import com.lorenzorigato.base.model.repository.IGenreRepository;
+import com.lorenzorigato.base.model.repository.MovieRepository;
+import com.lorenzorigato.base.model.repository.interfaces.IGenreRepository;
+import com.lorenzorigato.base.model.repository.interfaces.IMovieRepository;
 
 import dagger.Module;
 import dagger.Provides;
@@ -18,5 +22,16 @@ public class RepositoryModule {
             IGenreLocalDataSource localDataSource,
             IGenreRemoteDataSource remoteDataSource) {
         return new GenreRepository(localDataSource, remoteDataSource);
+    }
+
+    @ApplicationScope
+    @Provides
+    public static IMovieRepository providesMovieRepository(
+            IGenreRepository genreRepository,
+            IMovieLocalDataSource localDataSource,
+            IMovieRemoteDataSource remoteDataSource) {
+
+        return new MovieRepository(
+                genreRepository, localDataSource, remoteDataSource);
     }
 }
