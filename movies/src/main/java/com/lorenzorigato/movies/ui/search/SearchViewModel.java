@@ -2,9 +2,9 @@ package com.lorenzorigato.movies.ui.search;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.lorenzorigato.base.components.architecture.CombinedLiveData;
 import com.lorenzorigato.base.components.architecture.SingleLiveData;
 import com.lorenzorigato.base.datastructure.Trie;
 import com.lorenzorigato.base.model.entity.Genre;
@@ -15,7 +15,6 @@ import com.lorenzorigato.movies.ui.component.movielist.MovieLayoutMapper;
 import com.lorenzorigato.movies.ui.component.movielist.MovieViewHolder;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 public class SearchViewModel extends ViewModel {
@@ -36,20 +35,14 @@ public class SearchViewModel extends ViewModel {
     private boolean _hasLoadedAllMovies = false;
     private MutableLiveData<List<Movie>> movies = new MutableLiveData<>(new ArrayList<>());
     private MovieLayoutMapper movieLayoutMapper = new MovieLayoutMapper();
-    private MutableLiveData<LinkedHashSet<Integer>> favoritesIds = new MutableLiveData<>(new LinkedHashSet<>());
-    private CombinedLiveData<List<Movie>, LinkedHashSet<Integer>, List<MovieViewHolder.Layout>> layouts = new CombinedLiveData<>(this.movies, this.favoritesIds, new CombinedLiveData.Transformation<List<Movie>, LinkedHashSet<Integer>, List<MovieViewHolder.Layout>>() {
-
-        @Override
-        public List<MovieViewHolder.Layout> combine(List<Movie> movies, LinkedHashSet<Integer> favoriteIds) {
-            ArrayList<MovieViewHolder.Layout> layouts = new ArrayList<>();
-            for (Movie movie : movies) {
-                boolean isTop = movie.getRating() > 7.0;
-                boolean isFavorite = favoriteIds.contains(movie.getId());
-                MovieViewHolder.Layout layout = movieLayoutMapper.mapToLayout(movie, isTop, isFavorite);
-                layouts.add(layout);
-            }
-            return layouts;
+    private LiveData<List<MovieViewHolder.Layout>> layouts = Transformations.map(this.movies, movies -> {
+        ArrayList<MovieViewHolder.Layout> layouts = new ArrayList<>();
+        for (Movie movie : movies) {
+            boolean isTop = movie.getRating() > 7.0;
+            MovieViewHolder.Layout layout = movieLayoutMapper.mapToLayout(movie, isTop);
+            layouts.add(layout);
         }
+        return layouts;
     });
 
 

@@ -21,6 +21,9 @@ public class Movie {
     double rating;
 
     @ColumnInfo
+    boolean isFavorite = false;
+
+    @ColumnInfo
     String posterFullPath;
 
 
@@ -66,6 +69,13 @@ public class Movie {
         this.posterFullPath = posterFullPath;
     }
 
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -74,13 +84,14 @@ public class Movie {
         Movie movie = (Movie) o;
         return id == movie.id &&
                 Double.compare(movie.rating, rating) == 0 &&
+                isFavorite == movie.isFavorite &&
                 Objects.equals(title, movie.title) &&
                 Objects.equals(posterFullPath, movie.posterFullPath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, rating, posterFullPath);
+        return Objects.hash(id, title, rating, isFavorite, posterFullPath);
     }
 
     @Override
@@ -89,6 +100,7 @@ public class Movie {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", rating=" + rating +
+                ", isFavorite=" + isFavorite +
                 ", posterFullPath='" + posterFullPath + '\'' +
                 '}';
     }
