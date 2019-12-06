@@ -16,6 +16,15 @@
 
         <activity android:name="com.lorenzorigato.movies.ui.MoviesActivity"
             android:theme="@style/AppTheme.OverlapSystemBar">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+
+
+        <activity android:name="com.lorenzorigato.movies.ui.detail.MovieDetailActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

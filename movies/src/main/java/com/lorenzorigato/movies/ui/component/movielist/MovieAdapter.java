@@ -15,6 +15,7 @@ public class MovieAdapter extends ListAdapter<MovieViewHolder.Layout, MovieViewH
 
     // Static **************************************************************************************
     public interface Listener {
+        void onMovieClicked(MovieViewHolder.Layout layout);
         void onFavoriteButtonClicked(MovieViewHolder.Layout layout);
     }
 

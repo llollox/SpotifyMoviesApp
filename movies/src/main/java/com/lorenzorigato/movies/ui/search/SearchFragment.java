@@ -19,6 +19,7 @@ import com.lorenzorigato.movies.R;
 import com.lorenzorigato.movies.databinding.SearchFragmentBinding;
 import com.lorenzorigato.movies.ui.component.movielist.MovieAdapter;
 import com.lorenzorigato.movies.ui.component.movielist.MovieViewHolder;
+import com.lorenzorigato.movies.ui.detail.MovieDetailActivity;
 import com.paginate.Paginate;
 import javax.inject.Inject;
 import dagger.android.support.DaggerFragment;
@@ -184,5 +185,10 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
     @Override
     public void onFavoriteButtonClicked(MovieViewHolder.Layout layout) {
         this.viewModel.onToggleFavorite(layout);
+    }
+
+    @Override
+    public void onMovieClicked(MovieViewHolder.Layout layout) {
+        startActivity(MovieDetailActivity.getCallingIntent(getActivity()));
     }
 }

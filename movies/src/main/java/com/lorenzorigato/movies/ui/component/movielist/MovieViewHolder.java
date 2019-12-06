@@ -102,5 +102,11 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
                 this.listener.onFavoriteButtonClicked(layout);
             }
         });
+
+        this.binding.getRoot().setOnClickListener(v -> {
+            if (this.listener != null) {
+                this.listener.onMovieClicked(layout);
+            }
+        });
     }
 }
