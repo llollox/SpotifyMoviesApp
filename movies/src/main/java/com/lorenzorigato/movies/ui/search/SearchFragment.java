@@ -125,6 +125,10 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
             case MOVIES_NOT_LOADED_ERROR:
                 Toast.makeText(getActivity(), R.string.search_error_movies_not_loaded, Toast.LENGTH_SHORT).show();
                 break;
+
+            case FAVORITE_NOT_SET_ERROR:
+                Toast.makeText(getActivity(), R.string.favorites_error_unable_set_favorite, Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
@@ -179,6 +183,6 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
     // MovieAdapter.Listener methods ***************************************************************
     @Override
     public void onFavoriteButtonClicked(MovieViewHolder.Layout layout) {
-
+        this.viewModel.onToggleFavorite(layout);
     }
 }

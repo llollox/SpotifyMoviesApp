@@ -9,6 +9,8 @@ ext {
             architectureComponents : [
                     lifecycle       : "2.1.0",
                     navigation      : "2.1.0",
+                    rxjava          : "2.2.15",
+                    rxjavaAndroid   : "2.1.1",
             ],
 
             database : [

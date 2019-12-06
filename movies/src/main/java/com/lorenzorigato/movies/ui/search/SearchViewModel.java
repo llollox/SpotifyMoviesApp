@@ -29,11 +29,15 @@ public class SearchViewModel extends ViewModel {
     private IMovieRepository movieRepository;
     private Trie trie = new Trie(new ArrayList<>());
     private MutableLiveData<String> genreName = new MutableLiveData<>();
+
+    private LiveData<Genre> genre = Transformations.switchMap(this.genreName, name -> genreRepository.findByName(name));
+    private LiveData<List<Movie>> movies = Transformations.switchMap(this.genre, genre -> movieRepository.findByGenreId(genre.getId()));
+
     private MutableLiveData<List<String>> suggestions = new MutableLiveData<>(new ArrayList<>());
     private SingleLiveData<SearchView.Status> status = new SingleLiveData<>();
     private MutableLiveData<SearchView.State> state = new MutableLiveData<>(new SearchView.State());
     private boolean _hasLoadedAllMovies = false;
-    private MutableLiveData<List<Movie>> movies = new MutableLiveData<>(new ArrayList<>());
+
     private MovieLayoutMapper movieLayoutMapper = new MovieLayoutMapper();
     private LiveData<List<MovieViewHolder.Layout>> layouts = Transformations.map(this.movies, movies -> {
         ArrayList<MovieViewHolder.Layout> layouts = new ArrayList<>();
@@ -114,6 +118,18 @@ public class SearchViewModel extends ViewModel {
         }
     }
 
+    public void onToggleFavorite(MovieViewHolder.Layout layout) {
+        Movie movie = this.findMovieById(this.movies.getValue(), layout.getId());
+        if (movie != null) {
+            movie.setFavorite(!movie.isFavorite());
+            this.movieRepository.update(movie, (error, data) -> {
+                if (error != null) {
+                    this.status.setValue(SearchView.Status.FAVORITE_NOT_SET_ERROR);
+                }
+            });
+        }
+    }
+
 
     // Private class methods ***********************************************************************
     private void appendMovies(List<Movie> newMovies) {
@@ -124,6 +140,20 @@ public class SearchViewModel extends ViewModel {
         }
         movies.addAll(newMovies);
         this.setMovies(movies);
+    }
+
+    private Movie findMovieById(List<Movie> movies, int movieId) {
+        if (movies == null || movies.isEmpty()) {
+            return null;
+        }
+
+        for (Movie movie : movies) {
+            if (movie.getId() == movieId) {
+                return movie;
+            }
+        }
+
+        return null;
     }
 
     private void search(String genre) {
@@ -167,7 +197,7 @@ public class SearchViewModel extends ViewModel {
     private void setMovies(List<Movie> movies) {
         this.setEmptyTextViewVisible(movies.isEmpty());
         this.setRecyclerViewVisible(!movies.isEmpty());
-        this.movies.setValue(movies);
+//        this.movies.setValue(movies);
     }
 
     // Private state setters ***********************************************************************

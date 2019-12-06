@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="favorites_error_unable_set_favorite">Something went wrong! Unable set favorites right now. Please retry later.</string>
+</resources>

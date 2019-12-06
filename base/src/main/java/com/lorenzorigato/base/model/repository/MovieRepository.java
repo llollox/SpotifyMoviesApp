@@ -2,6 +2,7 @@ package com.lorenzorigato.base.model.repository;
 
 import androidx.lifecycle.LiveData;
 
+import com.lorenzorigato.base.components.util.AsyncCallback;
 import com.lorenzorigato.base.database.error.RecordNotFoundError;
 import com.lorenzorigato.base.model.datasource.local.interfaces.IMovieLocalDataSource;
 import com.lorenzorigato.base.model.datasource.remote.interfaces.IMovieRemoteDataSource;
@@ -44,6 +45,11 @@ public class MovieRepository implements IMovieRepository {
     @Override
     public LiveData<List<Movie>> findByIds(List<Integer> ids) {
         return this.localDataSource.findByIds(ids);
+    }
+
+    @Override
+    public LiveData<List<Movie>> findByGenreId(int genreId) {
+        return this.localDataSource.findByGenreId(genreId);
     }
 
     @Override
@@ -135,6 +141,13 @@ public class MovieRepository implements IMovieRepository {
         });
     }
 
+    @Override
+    public void update(Movie movie, AsyncCallback<Movie> callback) {
+        this.localDataSource.updateMovie(movie, callback);
+    }
+
+
+    // Private class methods ***********************************************************************
     private List<GenreMovieJoin> mapToGenreMovieJoin(int genreId, List<Movie> movies) {
         ArrayList<GenreMovieJoin> genreMovieJoins = new ArrayList<>();
         for (Movie movie : movies) {

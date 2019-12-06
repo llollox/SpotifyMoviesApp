@@ -1,6 +1,10 @@
 package com.lorenzorigato.base.di.module;
 
 import com.lorenzorigato.base.config.interfaces.IConfiguration;
+import com.lorenzorigato.base.database.SpotifyMoviesDatabase;
+import com.lorenzorigato.base.database.dao.GenreDao;
+import com.lorenzorigato.base.database.dao.GenreMovieJoinDao;
+import com.lorenzorigato.base.database.dao.MovieDao;
 import com.lorenzorigato.base.di.scope.ApplicationScope;
 import com.lorenzorigato.base.model.datasource.local.GenreLocalDataSource;
 import com.lorenzorigato.base.model.datasource.local.MovieLocalDataSource;
@@ -22,8 +26,9 @@ public class DataSourceModule {
 
     @ApplicationScope
     @Provides
-    public static IGenreLocalDataSource providesGenreLocalDataSource() {
-        return new GenreLocalDataSource();
+    public static IGenreLocalDataSource providesGenreLocalDataSource(SpotifyMoviesDatabase db) {
+        GenreDao genreDao = db.getGenreDao();
+        return new GenreLocalDataSource(genreDao);
     }
 
     @ApplicationScope
@@ -34,8 +39,10 @@ public class DataSourceModule {
 
     @ApplicationScope
     @Provides
-    public static IMovieLocalDataSource providesMovieLocalDataSource() {
-        return new MovieLocalDataSource();
+    public static IMovieLocalDataSource providesMovieLocalDataSource(SpotifyMoviesDatabase db) {
+        MovieDao movieDao = db.getMovieDao();
+        GenreMovieJoinDao genreMovieJoinDao = db.getGenreMovieJoinDao();
+        return new MovieLocalDataSource(genreMovieJoinDao, movieDao);
     }
 
     @ApplicationScope

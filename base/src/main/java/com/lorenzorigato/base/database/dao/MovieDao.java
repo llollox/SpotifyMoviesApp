@@ -23,16 +23,16 @@ public abstract class MovieDao {
     }
 
     @Query("SELECT * FROM movies_table WHERE id IN (:ids)")
-    abstract LiveData<List<Movie>> findByIds(List<Integer> ids);
+    public abstract LiveData<List<Movie>> findByIds(List<Integer> ids);
 
     @Query("SELECT * FROM movies_table")
-    abstract List<Movie> getAll();
+    public abstract List<Movie> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract void insertAll(Movie... movies);
+    public abstract void insertAll(Movie... movies);
 
     @Transaction
-    void insertAll(List<Movie> movies, List<GenreMovieJoin> genreMovieJoins) {
+    public void insertAll(List<Movie> movies, List<GenreMovieJoin> genreMovieJoins) {
         this.insertAll(movies.toArray(new Movie[movies.size()]));
         this.db.getGenreMovieJoinDao().insertAll(genreMovieJoins.toArray(new GenreMovieJoin[genreMovieJoins.size()]));
     }

@@ -1,5 +1,7 @@
 package com.lorenzorigato.base.model.repository;
 
+import androidx.lifecycle.LiveData;
+
 import com.lorenzorigato.base.components.util.AsyncCallback;
 import com.lorenzorigato.base.model.datasource.local.interfaces.IGenreLocalDataSource;
 import com.lorenzorigato.base.model.datasource.remote.interfaces.IGenreRemoteDataSource;
@@ -27,6 +29,11 @@ public class GenreRepository implements IGenreRepository {
 
 
     // IGenreRepository methods ********************************************************************
+    @Override
+    public LiveData<Genre> findByName(String name) {
+        return this.localDataSource.findByName(name);
+    }
+
     @Override
     public void findByName(String name, AsyncCallback<Genre> callback) {
         this.localDataSource.findByName(name, callback);

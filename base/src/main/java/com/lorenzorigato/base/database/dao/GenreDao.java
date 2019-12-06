@@ -23,5 +23,5 @@ public interface GenreDao {
     LiveData<Genre> findByNameLiveData(String name);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertAll(Genre... genres);
+    void insertAll(List<Genre> genres);
 }
