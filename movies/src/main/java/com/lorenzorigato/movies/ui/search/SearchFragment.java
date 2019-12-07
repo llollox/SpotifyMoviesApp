@@ -24,6 +24,7 @@ import com.lorenzorigato.movies.ui.detail.MovieDetailActivity;
 import com.paginate.Paginate;
 import javax.inject.Inject;
 import dagger.android.support.DaggerFragment;
+import timber.log.Timber;
 
 public class SearchFragment extends DaggerFragment implements MovieAdapter.Listener{
 
@@ -31,8 +32,7 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
     // Class attributes ****************************************************************************
     @Inject
     SearchViewModel viewModel;
-
-
+    private Paginate paginate;
     private SearchFragmentBinding binding;
 
 
@@ -54,12 +54,7 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         this.binding = SearchFragmentBinding.inflate(inflater, container, false);
-
-//        binding.favoritesBtn.setOnClickListener(v -> {
-//            getNavController().navigate(R.id.action_search_fragment_dest_to_detail_fragment_dest);
-//        });
 
         MovieAdapter adapter = new MovieAdapter(this);
         RecyclerView recyclerView = this.binding.viewMovieListLayout.movieListRecyclerView;
@@ -85,10 +80,10 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
             }
         };
 
-        Paginate.with(recyclerView, callbacks)
-            .setLoadingTriggerThreshold(6)
-            .addLoadingListItem(true)
-            .build();
+//        this.paginate = Paginate.with(recyclerView, callbacks)
+//            .setLoadingTriggerThreshold(6)
+//            .addLoadingListItem(true)
+//            .build();
 
         this.viewModel.getLayouts().observe(this, adapter::submitList);
         this.viewModel.getState().observe(this, this::handleStateChanged);
@@ -108,12 +103,17 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
         setTitle(this.viewModel.getGenreName().getValue());
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        this.binding.viewMovieListLayout.movieListRecyclerView.setAdapter(null);
+        this.binding = null;
+        this.viewModel = null;
+//        this.paginate.unbind();
+//        this.paginate = null;
+    }
 
     // Private class methods ***********************************************************************
-//    private NavController getNavController() {
-//        return NavHostFragment.findNavController(this);
-//    }
-
     private void handleStatusChanged(com.lorenzorigato.movies.ui.search.SearchView.Status status) {
         switch (status) {
             case GENRES_NOT_LOADED_ERROR:

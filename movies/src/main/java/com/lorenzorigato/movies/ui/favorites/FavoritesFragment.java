@@ -62,6 +62,14 @@ public class FavoritesFragment extends DaggerFragment implements MovieAdapter.Li
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        this.binding.viewMovieListLayout.movieListRecyclerView.setAdapter(null);
+        this.binding = null;
+        this.viewModel = null;
+    }
+
 
     // MovieAdapter.Listener methods ***************************************************************
     @Override
