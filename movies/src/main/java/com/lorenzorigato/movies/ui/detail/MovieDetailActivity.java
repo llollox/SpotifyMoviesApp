@@ -19,8 +19,11 @@ import dagger.android.support.DaggerAppCompatActivity;
 public class MovieDetailActivity extends DaggerAppCompatActivity {
 
     // Static **************************************************************************************
-    public static Intent getCallingIntent(Context context) {
-        return new Intent(context, MovieDetailActivity.class);
+    private static final String ARG_MOVIE_ID = "ARG_MOVIE_ID";
+    public static Intent getCallingIntent(Context context, int movieId) {
+        Intent intent = new Intent(context, MovieDetailActivity.class);
+        intent.putExtra(ARG_MOVIE_ID, movieId);
+        return intent;
     }
 
 
@@ -34,6 +37,14 @@ public class MovieDetailActivity extends DaggerAppCompatActivity {
 
 
     // Class methods *******************************************************************************
+    int getMovieId() {
+        Bundle args = getIntent().getExtras();
+        if (args != null) {
+            return args.getInt(ARG_MOVIE_ID);
+        }
+        return -1;
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

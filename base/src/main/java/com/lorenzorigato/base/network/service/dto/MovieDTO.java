@@ -7,15 +7,19 @@ public class MovieDTO {
     // Class attributes ****************************************************************************
     int id;
     String title;
+    String subtitle;
+    String description;
     double rating;
     PictureDTO cover;
     List<GenreDTO> genres;
 
 
     // Constructor *********************************************************************************
-    public MovieDTO(int id, String title, double rating, PictureDTO cover, List<GenreDTO> genres) {
+    public MovieDTO(int id, String title, String subtitle, String description, double rating, PictureDTO cover, List<GenreDTO> genres) {
         this.id = id;
         this.title = title;
+        this.subtitle = subtitle;
+        this.description = description;
         this.rating = rating;
         this.cover = cover;
         this.genres = genres;
@@ -29,6 +33,14 @@ public class MovieDTO {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public double getRating() {
@@ -48,6 +60,8 @@ public class MovieDTO {
         return "MovieDTO{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
+                ", subtitle='" + subtitle + '\'' +
+                ", description='" + description + '\'' +
                 ", rating=" + rating +
                 ", cover=" + cover +
                 ", genres=" + genres +

@@ -1,5 +1,6 @@
 package com.lorenzorigato.movies.ui.search;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -189,6 +190,7 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
 
     @Override
     public void onMovieClicked(MovieViewHolder.Layout layout) {
-        startActivity(MovieDetailActivity.getCallingIntent(getActivity()));
+        Intent intent = MovieDetailActivity.getCallingIntent(getActivity(), layout.getId());
+        startActivity(intent);
     }
 }

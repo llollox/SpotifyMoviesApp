@@ -87,6 +87,8 @@ public class MovieRemoteDataSource implements IMovieRemoteDataSource {
         return new Movie(
                 movieDTO.getId(),
                 movieDTO.getTitle(),
+                movieDTO.getSubtitle(),
+                movieDTO.getDescription(),
                 movieDTO.getRating(),
                 this.configuration.getServerUrl() + movieDTO.getCover().getMedium().substring(1));
     }

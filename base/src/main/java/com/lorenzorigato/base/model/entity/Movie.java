@@ -18,6 +18,12 @@ public class Movie {
     String title;
 
     @ColumnInfo
+    String subtitle;
+
+    @ColumnInfo
+    String description;
+
+    @ColumnInfo
     double rating;
 
     @ColumnInfo
@@ -28,9 +34,11 @@ public class Movie {
 
 
     // Constructor *********************************************************************************
-    public Movie(int id, String title, double rating, String posterFullPath) {
+    public Movie(int id, String title, String subtitle, String description, double rating, String posterFullPath) {
         this.id = id;
         this.title = title;
+        this.subtitle = subtitle;
+        this.description = description;
         this.rating = rating;
         this.posterFullPath = posterFullPath;
     }
@@ -51,6 +59,22 @@ public class Movie {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public double getRating() {
@@ -86,12 +110,14 @@ public class Movie {
                 Double.compare(movie.rating, rating) == 0 &&
                 isFavorite == movie.isFavorite &&
                 Objects.equals(title, movie.title) &&
+                Objects.equals(subtitle, movie.subtitle) &&
+                Objects.equals(description, movie.description) &&
                 Objects.equals(posterFullPath, movie.posterFullPath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, rating, isFavorite, posterFullPath);
+        return Objects.hash(id, title, subtitle, description, rating, isFavorite, posterFullPath);
     }
 
     @Override
@@ -99,6 +125,8 @@ public class Movie {
         return "Movie{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
+                ", subtitle='" + subtitle + '\'' +
+                ", description='" + description + '\'' +
                 ", rating=" + rating +
                 ", isFavorite=" + isFavorite +
                 ", posterFullPath='" + posterFullPath + '\'' +

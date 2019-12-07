@@ -16,21 +16,24 @@ public class MovieDetailModule {
     @Provides
     public static MovieDetailViewModel providesMovieDetailViewModel(
             MovieDetailActivity movieDetailActivity, IMovieRepository movieRepository) {
-        MovieDetailViewModelFactory factory = new MovieDetailViewModelFactory(movieRepository);
+        int movieId = movieDetailActivity.getMovieId();
+        MovieDetailViewModelFactory factory = new MovieDetailViewModelFactory(movieRepository, movieId);
         return ViewModelProviders.of(movieDetailActivity, factory).get(MovieDetailViewModel.class);
     }
 
     public static class MovieDetailViewModelFactory implements ViewModelProvider.Factory {
         private IMovieRepository movieRepository;
+        private int movieId;
 
-        public MovieDetailViewModelFactory(IMovieRepository movieRepository) {
+        public MovieDetailViewModelFactory(IMovieRepository movieRepository, int movieId) {
             this.movieRepository = movieRepository;
+            this.movieId = movieId;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MovieDetailViewModel(this.movieRepository);
+            return (T) new MovieDetailViewModel(this.movieRepository, this.movieId);
         }
     }
 }
