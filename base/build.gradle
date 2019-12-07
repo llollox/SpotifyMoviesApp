@@ -43,6 +43,7 @@ dependencies {
 
     implementation dependency.networking.values()
     implementation dependency.ui.values()
+    implementation dependency.image.values()
     api dependency.architectureComponents.values()
     implementation dependency.dependencyInjection.values()
     implementation dependency.util.values()

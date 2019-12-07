@@ -106,7 +106,7 @@
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.5"
                     android:scaleType="centerCrop"
-                    bind:url="@{state.coverUrl}"/>
+                    bind:urlWithBottomGradient="@{state.coverUrl}"/>
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
