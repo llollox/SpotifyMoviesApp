@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface IMovieLocalDataSource {
 
+    LiveData<List<Movie>> findFavorites();
     LiveData<List<Movie>> findByGenreId(int genreId);
     LiveData<MovieWithActors> findById(int id);
     LiveData<List<Movie>> findByIds(List<Integer> ids);

@@ -44,6 +44,11 @@ public class MovieLocalDataSource implements IMovieLocalDataSource {
     }
 
     @Override
+    public LiveData<List<Movie>> findFavorites() {
+        return this.movieDao.findFavorites();
+    }
+
+    @Override
     public LiveData<MovieWithActors> findById(int id) {
         return movieDao.findById(id);
     }

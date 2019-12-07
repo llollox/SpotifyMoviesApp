@@ -34,6 +34,9 @@ public abstract class MovieDao {
     @Query("SELECT * FROM movies_table")
     public abstract List<Movie> getAll();
 
+    @Query("SELECT * FROM movies_table WHERE isFavorite = 1")
+    public abstract LiveData<List<Movie>> findFavorites();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertAll(Movie... movies);
 

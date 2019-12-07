@@ -52,6 +52,11 @@ public class MovieRepository implements IMovieRepository {
     }
 
     @Override
+    public LiveData<List<Movie>> findFavorites() {
+        return this.localDataSource.findFavorites();
+    }
+
+    @Override
     public LiveData<List<Movie>> findByIds(List<Integer> ids) {
         return this.localDataSource.findByIds(ids);
     }
