@@ -46,6 +46,7 @@ public class FavoritesFragment extends DaggerFragment implements MovieAdapter.Li
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.binding = FavoritesFragmentBinding.inflate(inflater, container, false);
+        this.binding.viewMovieListLayout.movieListEmptyPlaceHolderTextView.setText(R.string.favorites_empty_placehoder);
         this.configureRecyclerView(this.binding.viewMovieListLayout.movieListRecyclerView);
         this.viewModel.getStatus().observe(this, this::handleStatusChanged);
         this.viewModel.getState().observe(this, this::handleStateChanged);
