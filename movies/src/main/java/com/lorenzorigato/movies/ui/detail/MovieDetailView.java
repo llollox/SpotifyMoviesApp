@@ -2,6 +2,10 @@ package com.lorenzorigato.movies.ui.detail;
 
 public interface MovieDetailView {
 
+    enum Status {
+        FAVORITE_NOT_SET_ERROR
+    }
+
     class Layout {
         String coverUrl;
         String title;
