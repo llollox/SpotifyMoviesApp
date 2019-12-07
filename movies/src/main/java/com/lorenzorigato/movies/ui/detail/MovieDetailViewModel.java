@@ -5,8 +5,12 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.lorenzorigato.base.components.architecture.SingleLiveData;
+import com.lorenzorigato.base.model.entity.Actor;
 import com.lorenzorigato.base.model.entity.Movie;
+import com.lorenzorigato.base.model.entity.MovieWithActors;
 import com.lorenzorigato.base.model.repository.interfaces.IMovieRepository;
+
+import java.util.ArrayList;
 
 
 public class MovieDetailViewModel extends ViewModel {
@@ -14,7 +18,7 @@ public class MovieDetailViewModel extends ViewModel {
 
     // Private class attributes ********************************************************************
     private IMovieRepository movieRepository;
-    private LiveData<Movie> movie;
+    private LiveData<MovieWithActors> movie;
     private LiveData<MovieDetailView.State> state;
     private SingleLiveData<MovieDetailView.Status> status = new SingleLiveData<>();
 
@@ -23,13 +27,7 @@ public class MovieDetailViewModel extends ViewModel {
     public MovieDetailViewModel(IMovieRepository movieRepository, int movieId) {
         this.movieRepository = movieRepository;
         this.movie = this.movieRepository.findById(movieId);
-        this.state = Transformations.map(this.movie, movie ->
-                new MovieDetailView.State(movie.getPosterFullPath(),
-                        movie.getTitle(),
-                        movie.getSubtitle(),
-                        movie.getDescription(),
-                        movie.isFavorite(),
-                        movie.getRating()));
+        this.state = Transformations.map(this.movie, this::mapToState);
     }
 
 
@@ -39,8 +37,9 @@ public class MovieDetailViewModel extends ViewModel {
     public LiveData<MovieDetailView.Status > getStatus() { return this.status; }
 
     public void onToggleFavorite() {
-        Movie movie = this.movie.getValue();
-        if (movie != null) {
+        MovieWithActors movieWithActors = this.movie.getValue();
+        if (movieWithActors != null) {
+            Movie movie = movieWithActors.getMovie();
             movie.setFavorite(!movie.isFavorite());
             this.movieRepository.update(movie, (error, updatedMovie) -> {
                 if (error != null) {
@@ -56,5 +55,29 @@ public class MovieDetailViewModel extends ViewModel {
                 }
             });
         }
+    }
+
+    private MovieDetailView.State mapToState(MovieWithActors movieWithActors) {
+        ArrayList<MovieDetailView.State.Actor> actors = new ArrayList<>();
+        for (Actor actor : movieWithActors.getActors()) {
+            actors.add(mapToState(actor));
+        }
+
+        Movie movie = movieWithActors.getMovie();
+
+        return new MovieDetailView.State(movie.getPosterFullPath(),
+                movie.getTitle(),
+                movie.getSubtitle(),
+                movie.getDescription(),
+                movie.isFavorite(),
+                movie.getRating(),
+                actors);
+    }
+
+    private MovieDetailView.State.Actor mapToState(Actor actor) {
+        return new MovieDetailView.State.Actor(
+                actor.getName(),
+                actor.getCharacter(),
+                actor.getPhotoUrl());
     }
 }

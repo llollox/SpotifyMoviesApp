@@ -6,8 +6,10 @@ import com.lorenzorigato.base.components.util.AsyncCallback;
 import com.lorenzorigato.base.database.error.RecordNotFoundError;
 import com.lorenzorigato.base.model.datasource.local.interfaces.IMovieLocalDataSource;
 import com.lorenzorigato.base.model.datasource.remote.interfaces.IMovieRemoteDataSource;
+import com.lorenzorigato.base.model.entity.Actor;
 import com.lorenzorigato.base.model.entity.GenreMovieJoin;
 import com.lorenzorigato.base.model.entity.Movie;
+import com.lorenzorigato.base.model.entity.MovieWithActors;
 import com.lorenzorigato.base.model.error.TaskAlreadyRunningError;
 import com.lorenzorigato.base.model.repository.interfaces.IGenreRepository;
 import com.lorenzorigato.base.model.repository.interfaces.IMovieRepository;
@@ -29,7 +31,9 @@ public class MovieRepository implements IMovieRepository {
 
 
     // Constructor *********************************************************************************
-    public MovieRepository(IGenreRepository genreRepository, IMovieLocalDataSource localDataSource, IMovieRemoteDataSource remoteDataSource) {
+    public MovieRepository(
+            IGenreRepository genreRepository,
+            IMovieLocalDataSource localDataSource, IMovieRemoteDataSource remoteDataSource) {
         this.genreRepository = genreRepository;
         this.localDataSource = localDataSource;
         this.remoteDataSource = remoteDataSource;
@@ -43,7 +47,7 @@ public class MovieRepository implements IMovieRepository {
     }
 
     @Override
-    public LiveData<Movie> findById(int id) {
+    public LiveData<MovieWithActors> findById(int id) {
         return this.localDataSource.findById(id);
     }
 
@@ -125,9 +129,10 @@ public class MovieRepository implements IMovieRepository {
                     int genreId = genre.getId();
                     List<Movie> movies = response.getMovies();
                     List<GenreMovieJoin> genreMovieJoins = this.mapToGenreMovieJoin(genreId, movies);
+                    List<Actor> actors = response.getActors();
                     boolean hasLoadedAllMovies = offset + movies.size() >= response.getNumTotalMovies();
 
-                    this.localDataSource.saveMovies(movies, genreMovieJoins, (dbError, savedMovies) -> {
+                    this.localDataSource.saveMovies(movies, genreMovieJoins, actors, (dbError, savedMovies) -> {
                         this.isUpdateByGenreRunning = false;
 
                         if (callback == null) {

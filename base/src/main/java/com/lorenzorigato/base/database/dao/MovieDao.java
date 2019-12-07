@@ -8,8 +8,10 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 
 import com.lorenzorigato.base.database.SpotifyMoviesDatabase;
+import com.lorenzorigato.base.model.entity.Actor;
 import com.lorenzorigato.base.model.entity.GenreMovieJoin;
 import com.lorenzorigato.base.model.entity.Movie;
+import com.lorenzorigato.base.model.entity.MovieWithActors;
 
 import java.util.List;
 
@@ -22,8 +24,9 @@ public abstract class MovieDao {
         this.db = db;
     }
 
+    @Transaction
     @Query("SELECT * FROM movies_table WHERE id = :id")
-    public abstract LiveData<Movie> findByIds(int id);
+    public abstract LiveData<MovieWithActors> findById(int id);
 
     @Query("SELECT * FROM movies_table WHERE id IN (:ids)")
     public abstract LiveData<List<Movie>> findByIds(List<Integer> ids);
@@ -35,8 +38,9 @@ public abstract class MovieDao {
     public abstract void insertAll(Movie... movies);
 
     @Transaction
-    public void insertAll(List<Movie> movies, List<GenreMovieJoin> genreMovieJoins) {
+    public void insertAll(List<Movie> movies, List<GenreMovieJoin> genreMovieJoins, List<Actor> actors) {
         this.insertAll(movies.toArray(new Movie[movies.size()]));
         this.db.getGenreMovieJoinDao().insertAll(genreMovieJoins.toArray(new GenreMovieJoin[genreMovieJoins.size()]));
+        this.db.getActorDao().insertAll(actors);
     }
 }

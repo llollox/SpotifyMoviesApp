@@ -7,9 +7,11 @@ import com.lorenzorigato.base.components.util.AsyncCallback;
 import com.lorenzorigato.base.database.dao.GenreMovieJoinDao;
 import com.lorenzorigato.base.database.dao.MovieDao;
 import com.lorenzorigato.base.model.datasource.local.interfaces.IMovieLocalDataSource;
+import com.lorenzorigato.base.model.entity.Actor;
 import com.lorenzorigato.base.model.entity.Genre;
 import com.lorenzorigato.base.model.entity.GenreMovieJoin;
 import com.lorenzorigato.base.model.entity.Movie;
+import com.lorenzorigato.base.model.entity.MovieWithActors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +44,8 @@ public class MovieLocalDataSource implements IMovieLocalDataSource {
     }
 
     @Override
-    public LiveData<Movie> findById(int id) {
-        return movieDao.findByIds(id);
+    public LiveData<MovieWithActors> findById(int id) {
+        return movieDao.findById(id);
     }
 
     @Override
@@ -60,11 +62,11 @@ public class MovieLocalDataSource implements IMovieLocalDataSource {
     }
 
     @Override
-    public void saveMovies(List<Movie> movies, List<GenreMovieJoin> genreMovieJoins, AsyncCallback<List<Movie>> callback) {
+    public void saveMovies(List<Movie> movies, List<GenreMovieJoin> genreMovieJoins, List<Actor> actors, AsyncCallback<List<Movie>> callback) {
 
         Single.create((SingleOnSubscribe<List<Movie>>) emitter -> {
             try {
-                movieDao.insertAll(movies, genreMovieJoins);
+                movieDao.insertAll(movies, genreMovieJoins, actors);
                 emitter.onSuccess(movies);
             } catch (Throwable t) {
                 emitter.onError(t);

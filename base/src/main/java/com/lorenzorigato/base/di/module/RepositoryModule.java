@@ -31,7 +31,6 @@ public class RepositoryModule {
             IMovieLocalDataSource localDataSource,
             IMovieRemoteDataSource remoteDataSource) {
 
-        return new MovieRepository(
-                genreRepository, localDataSource, remoteDataSource);
+        return new MovieRepository(genreRepository, localDataSource, remoteDataSource);
     }
 }

@@ -12,10 +12,11 @@ public class MovieDTO {
     double rating;
     PictureDTO cover;
     List<GenreDTO> genres;
+    List<ActorDTO> cast;
 
 
     // Constructor *********************************************************************************
-    public MovieDTO(int id, String title, String subtitle, String description, double rating, PictureDTO cover, List<GenreDTO> genres) {
+    public MovieDTO(int id, String title, String subtitle, String description, double rating, PictureDTO cover, List<GenreDTO> genres, List<ActorDTO> cast) {
         this.id = id;
         this.title = title;
         this.subtitle = subtitle;
@@ -23,6 +24,7 @@ public class MovieDTO {
         this.rating = rating;
         this.cover = cover;
         this.genres = genres;
+        this.cast = cast;
     }
 
 
@@ -55,6 +57,10 @@ public class MovieDTO {
         return genres;
     }
 
+    public List<ActorDTO> getCast() {
+        return cast;
+    }
+
     @Override
     public String toString() {
         return "MovieDTO{" +
@@ -65,6 +71,7 @@ public class MovieDTO {
                 ", rating=" + rating +
                 ", cover=" + cover +
                 ", genres=" + genres +
+                ", cast=" + cast +
                 '}';
     }
 }

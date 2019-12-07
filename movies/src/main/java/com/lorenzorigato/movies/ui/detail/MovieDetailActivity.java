@@ -52,7 +52,7 @@ public class MovieDetailActivity extends DaggerAppCompatActivity {
         super.onCreate(savedInstanceState);
         this.binding = DataBindingUtil.setContentView(this, R.layout.movie_detail_activity);
         this.configureActionBar();
-        this.viewModel.getState().observe(this, this.binding::setState);
+        this.viewModel.getState().observe(this, this::handleStateChanged);
         this.viewModel.getStatus().observe(this, this::handleStatusChanged);
         this.binding.fab.setOnClickListener(v -> this.viewModel.onToggleFavorite());
     }
@@ -75,6 +75,10 @@ public class MovieDetailActivity extends DaggerAppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    private void handleStateChanged(MovieDetailView.State state) {
+        this.binding.setState(state);
     }
 
     private void handleStatusChanged(MovieDetailView.Status status) {

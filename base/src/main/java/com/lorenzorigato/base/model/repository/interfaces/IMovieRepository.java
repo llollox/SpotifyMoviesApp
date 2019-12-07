@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.lorenzorigato.base.components.util.AsyncCallback;
 import com.lorenzorigato.base.model.entity.Movie;
+import com.lorenzorigato.base.model.entity.MovieWithActors;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface IMovieRepository {
 
     boolean isUpdateByGenreRunning();
 
-    LiveData<Movie> findById(int id);
+    LiveData<MovieWithActors> findById(int id);
 
     LiveData<List<Movie>> findByIds(List<Integer> ids);
 
