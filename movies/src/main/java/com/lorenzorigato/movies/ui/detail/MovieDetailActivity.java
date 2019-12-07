@@ -9,10 +9,13 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.lorenzorigato.movies.R;
 import com.lorenzorigato.movies.databinding.MovieDetailActivityBinding;
+import com.lorenzorigato.movies.ui.detail.actors.ActorAdapter;
 
 import javax.inject.Inject;
 
@@ -36,6 +39,7 @@ public class MovieDetailActivity extends DaggerAppCompatActivity {
 
     // Private class attributes ********************************************************************
     private MovieDetailActivityBinding binding;
+    private ActorAdapter actorAdapter;
 
 
     // Class methods *******************************************************************************
@@ -52,6 +56,7 @@ public class MovieDetailActivity extends DaggerAppCompatActivity {
         super.onCreate(savedInstanceState);
         this.binding = DataBindingUtil.setContentView(this, R.layout.movie_detail_activity);
         this.configureActionBar();
+        this.configureActorRecyclerView();
         this.viewModel.getState().observe(this, this::handleStateChanged);
         this.viewModel.getStatus().observe(this, this::handleStatusChanged);
         this.binding.fab.setOnClickListener(v -> this.viewModel.onToggleFavorite());
@@ -77,8 +82,16 @@ public class MovieDetailActivity extends DaggerAppCompatActivity {
         }
     }
 
+    private void configureActorRecyclerView() {
+        this.actorAdapter = new ActorAdapter();
+        RecyclerView recyclerView = this.binding.movieDetailActorsRecyclerView;
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        recyclerView.setAdapter(this.actorAdapter);
+    }
+
     private void handleStateChanged(MovieDetailView.State state) {
         this.binding.setState(state);
+        this.actorAdapter.submitList(state.getActors());
     }
 
     private void handleStatusChanged(MovieDetailView.Status status) {

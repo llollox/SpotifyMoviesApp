@@ -9,6 +9,7 @@ import com.lorenzorigato.base.model.entity.Actor;
 import com.lorenzorigato.base.model.entity.Movie;
 import com.lorenzorigato.base.model.entity.MovieWithActors;
 import com.lorenzorigato.base.model.repository.interfaces.IMovieRepository;
+import com.lorenzorigato.movies.ui.detail.actors.ActorViewHolder;
 
 import java.util.ArrayList;
 
@@ -58,7 +59,7 @@ public class MovieDetailViewModel extends ViewModel {
     }
 
     private MovieDetailView.State mapToState(MovieWithActors movieWithActors) {
-        ArrayList<MovieDetailView.State.Actor> actors = new ArrayList<>();
+        ArrayList<ActorViewHolder.Layout> actors = new ArrayList<>();
         for (Actor actor : movieWithActors.getActors()) {
             actors.add(mapToState(actor));
         }
@@ -74,8 +75,9 @@ public class MovieDetailViewModel extends ViewModel {
                 actors);
     }
 
-    private MovieDetailView.State.Actor mapToState(Actor actor) {
-        return new MovieDetailView.State.Actor(
+    private ActorViewHolder.Layout mapToState(Actor actor) {
+        return new ActorViewHolder.Layout(
+                actor.getId(),
                 actor.getName(),
                 actor.getCharacter(),
                 actor.getPhotoUrl());

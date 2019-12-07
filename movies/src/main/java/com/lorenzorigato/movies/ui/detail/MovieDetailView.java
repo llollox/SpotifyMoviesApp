@@ -1,5 +1,7 @@
 package com.lorenzorigato.movies.ui.detail;
 
+import com.lorenzorigato.movies.ui.detail.actors.ActorViewHolder;
+
 import java.util.List;
 
 public interface MovieDetailView {
@@ -12,39 +14,15 @@ public interface MovieDetailView {
 
     class State {
 
-        static class Actor {
-            String name;
-            String character;
-            String photoUrl;
-
-            public Actor(String name, String character, String photoUrl) {
-                this.name = name;
-                this.character = character;
-                this.photoUrl = photoUrl;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public String getCharacter() {
-                return character;
-            }
-
-            public String getPhotoUrl() {
-                return photoUrl;
-            }
-        }
-
         String coverUrl;
         String title;
         String subtitle;
         String description;
         boolean isFavorite;
         double rating;
-        List<Actor> actors;
+        List<ActorViewHolder.Layout> actors;
 
-        public State(String coverUrl, String title, String subtitle, String description, boolean isFavorite, double rating, List<Actor> actors) {
+        public State(String coverUrl, String title, String subtitle, String description, boolean isFavorite, double rating, List<ActorViewHolder.Layout> actors) {
             this.coverUrl = coverUrl;
             this.title = title;
             this.subtitle = subtitle;
@@ -78,7 +56,7 @@ public interface MovieDetailView {
             return rating;
         }
 
-        public List<Actor> getActors() {
+        public List<ActorViewHolder.Layout> getActors() {
             return actors;
         }
     }
