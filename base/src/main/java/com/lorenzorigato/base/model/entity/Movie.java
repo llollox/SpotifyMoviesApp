@@ -27,22 +27,22 @@ public class Movie {
     double rating;
 
     @ColumnInfo
-    boolean isFavorite = false;
+    boolean isFavorite;
 
     @ColumnInfo
     String posterFullPath;
 
 
     // Constructor *********************************************************************************
-    public Movie(int id, String title, String subtitle, String description, double rating, String posterFullPath) {
+    public Movie(int id, String title, String subtitle, String description, double rating, boolean isFavorite, String posterFullPath) {
         this.id = id;
         this.title = title;
         this.subtitle = subtitle;
         this.description = description;
         this.rating = rating;
+        this.isFavorite = isFavorite;
         this.posterFullPath = posterFullPath;
     }
-
 
     // Class methods *******************************************************************************
     public int getId() {

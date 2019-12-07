@@ -15,6 +15,10 @@ public class MovieWithActors {
             entityColumn = "movieId")
     public List<Actor> actors;
 
+    public MovieWithActors(Movie movie, List<Actor> actors) {
+        this.movie = movie;
+        this.actors = actors;
+    }
 
     public Movie getMovie() {
         return movie;
