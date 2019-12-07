@@ -6,14 +6,14 @@ public interface MovieDetailView {
         FAVORITE_NOT_SET_ERROR
     }
 
-    class Layout {
+    class State {
         String coverUrl;
         String title;
         String subtitle;
         String description;
         double rating;
 
-        public Layout(String coverUrl, String title, String subtitle, String description, double rating) {
+        public State(String coverUrl, String title, String subtitle, String description, double rating) {
             this.coverUrl = coverUrl;
             this.title = title;
             this.subtitle = subtitle;

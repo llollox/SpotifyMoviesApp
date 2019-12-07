@@ -15,7 +15,7 @@ public class MovieDetailViewModel extends ViewModel {
     // Private class attributes ********************************************************************
     private IMovieRepository movieRepository;
     private LiveData<Movie> movie;
-    private LiveData<MovieDetailView.Layout> layout;
+    private LiveData<MovieDetailView.State> state;
     private SingleLiveData<MovieDetailView.Status> status = new SingleLiveData<>();
 
 
@@ -23,8 +23,8 @@ public class MovieDetailViewModel extends ViewModel {
     public MovieDetailViewModel(IMovieRepository movieRepository, int movieId) {
         this.movieRepository = movieRepository;
         this.movie = this.movieRepository.findById(movieId);
-        this.layout = Transformations.map(this.movie, movie ->
-                new MovieDetailView.Layout(movie.getPosterFullPath(),
+        this.state = Transformations.map(this.movie, movie ->
+                new MovieDetailView.State(movie.getPosterFullPath(),
                         movie.getTitle(),
                         movie.getSubtitle(),
                         movie.getDescription(),
@@ -33,7 +33,7 @@ public class MovieDetailViewModel extends ViewModel {
 
 
     // Class methods *******************************************************************************
-    public LiveData<MovieDetailView.Layout> getLayout() { return this.layout; }
+    public LiveData<MovieDetailView.State > getState() { return this.state; }
 
     public void onToggleFavorite() {
         Movie movie = this.movie.getValue();

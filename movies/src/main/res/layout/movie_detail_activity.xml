@@ -6,8 +6,8 @@
 
     <data>
         <variable
-            name="layout"
-            type="com.lorenzorigato.movies.ui.detail.MovieDetailView.Layout" />
+            name="state"
+            type="com.lorenzorigato.movies.ui.detail.MovieDetailView.State" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -33,7 +33,7 @@
                     android:layout_marginTop="16dp"
                     android:textSize="20sp"
                     android:textColor="@color/colorTextPrimary"
-                    android:text="@{layout.subtitle}"/>
+                    android:text="@{state.subtitle}"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -51,7 +51,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_gravity="center_vertical"
-                        android:text="@{String.valueOf(layout.rating)}"
+                        android:text="@{String.valueOf(state.rating)}"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="@color/colorTextPrimary"/>
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:textColor="@color/colorTextPrimary"
-                    android:text="@{layout.description}"
+                    android:text="@{state.description}"
                     android:textSize="16sp"/>
 
             </LinearLayout>
@@ -82,7 +82,7 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:title="@{layout.title}"
+                app:title="@{state.title}"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
                 app:contentScrim="@color/colorPrimary"
                 app:expandedTitleMarginStart="48dp"
@@ -96,7 +96,7 @@
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.5"
                     android:scaleType="centerCrop"
-                    bind:url="@{layout.coverUrl}"/>
+                    bind:url="@{state.coverUrl}"/>
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
