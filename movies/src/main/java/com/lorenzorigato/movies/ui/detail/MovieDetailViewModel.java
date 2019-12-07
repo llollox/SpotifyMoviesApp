@@ -28,6 +28,7 @@ public class MovieDetailViewModel extends ViewModel {
                         movie.getTitle(),
                         movie.getSubtitle(),
                         movie.getDescription(),
+                        movie.isFavorite(),
                         movie.getRating()));
     }
 
@@ -35,13 +36,23 @@ public class MovieDetailViewModel extends ViewModel {
     // Class methods *******************************************************************************
     public LiveData<MovieDetailView.State > getState() { return this.state; }
 
+    public LiveData<MovieDetailView.Status > getStatus() { return this.status; }
+
     public void onToggleFavorite() {
         Movie movie = this.movie.getValue();
         if (movie != null) {
             movie.setFavorite(!movie.isFavorite());
-            this.movieRepository.update(movie, (error, data) -> {
+            this.movieRepository.update(movie, (error, updatedMovie) -> {
                 if (error != null) {
                     this.status.setValue(MovieDetailView.Status.FAVORITE_NOT_SET_ERROR);
+                }
+                else {
+                    if (updatedMovie.isFavorite()) {
+                        this.status.setValue(MovieDetailView.Status.FAVORITE_ADD_SUCCESS);
+                    }
+                    else {
+                        this.status.setValue(MovieDetailView.Status.FAVORITE_REMOVED_SUCCESS);
+                    }
                 }
             });
         }

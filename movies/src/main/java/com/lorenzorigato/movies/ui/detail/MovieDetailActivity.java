@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.lorenzorigato.movies.R;
 import com.lorenzorigato.movies.databinding.MovieDetailActivityBinding;
 
@@ -51,6 +53,8 @@ public class MovieDetailActivity extends DaggerAppCompatActivity {
         this.binding = DataBindingUtil.setContentView(this, R.layout.movie_detail_activity);
         this.configureActionBar();
         this.viewModel.getState().observe(this, this.binding::setState);
+        this.viewModel.getStatus().observe(this, this::handleStatusChanged);
+        this.binding.fab.setOnClickListener(v -> this.viewModel.onToggleFavorite());
     }
 
     @Override
@@ -70,6 +74,23 @@ public class MovieDetailActivity extends DaggerAppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void handleStatusChanged(MovieDetailView.Status status) {
+        switch (status) {
+
+            case FAVORITE_ADD_SUCCESS:
+                Snackbar.make(this.binding.getRoot(), R.string.favorites_movie_added_success, Snackbar.LENGTH_SHORT).show();
+                break;
+
+            case FAVORITE_REMOVED_SUCCESS:
+                Snackbar.make(this.binding.getRoot(), R.string.favorites_movie_removed_success, Snackbar.LENGTH_SHORT).show();
+                break;
+
+            case FAVORITE_NOT_SET_ERROR:
+                Toast.makeText(this, R.string.favorites_error_unable_set_favorite, Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 }
