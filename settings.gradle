@@ -1,2 +1,2 @@
-include ':app', ':base', ':movies'
+include ':app', ':base', ':movies', ':movies-sample'
 rootProject.name='SpotifyMoviesApp'

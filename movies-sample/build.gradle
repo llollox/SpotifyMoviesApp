@@ -1,0 +1,74 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.dokka-android'
+apply from: '../dependencies.gradle'
+
+android {
+    signingConfigs {
+        release {
+            storeFile file('/Users/lorenzorigato/development/android/SpotifyMoviesApp/spotify-movies-app.keystore')
+            storePassword 'spotify'
+            keyAlias = 'spotify'
+            keyPassword 'spotify'
+        }
+    }
+    compileSdkVersion versions.sdk.compile
+    defaultConfig {
+        applicationId "com.lorenzorigato.spotifymoviesapp"
+        minSdkVersion versions.sdk.min
+        targetSdkVersion versions.sdk.target
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    dokka {
+        outputFormat = 'html'
+        outputDirectory = "$buildDir/javadoc"
+    }
+
+    flavorDimensions "default"
+    productFlavors {
+        dev {
+            // The following configuration limits the "development" flavor to use only xxhdpi screen-density resources
+            resConfigs "xxhdpi"
+            signingConfig signingConfigs.debug
+        }
+
+        prod {
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation dependency.about.values()
+    implementation dependency.dependencyInjection.values()
+    implementation dependency.networking.values()
+    implementation dependency.util.values()
+    annotationProcessor dependency.dependencyInjectionProcessor.values()
+
+    // Feature Modules
+    implementation project(':base')
+    implementation project(':movies')
+
+    debugImplementation dependency.debug.values()
+    testImplementation dependency.testing.values()
+}
