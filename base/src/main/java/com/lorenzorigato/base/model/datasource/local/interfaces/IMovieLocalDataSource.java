@@ -12,6 +12,7 @@ import java.util.List;
 public interface IMovieLocalDataSource {
 
     LiveData<List<Movie>> findByGenreId(int genreId);
+    LiveData<Movie> findById(int id);
     LiveData<List<Movie>> findByIds(List<Integer> ids);
     void findMoviesByGenre(Genre genre, AsyncCallback<List<Movie>> callback);
     void saveMovies(List<Movie> movies, List<GenreMovieJoin> genreMovieJoins, AsyncCallback<List<Movie>> callback);

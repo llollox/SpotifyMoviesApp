@@ -11,6 +11,8 @@ public interface IMovieRepository {
 
     boolean isUpdateByGenreRunning();
 
+    LiveData<Movie> findById(int id);
+
     LiveData<List<Movie>> findByIds(List<Integer> ids);
 
     LiveData<List<Movie>> findByGenreId(int genreId);

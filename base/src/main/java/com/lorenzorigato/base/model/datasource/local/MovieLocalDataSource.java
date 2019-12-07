@@ -42,6 +42,11 @@ public class MovieLocalDataSource implements IMovieLocalDataSource {
     }
 
     @Override
+    public LiveData<Movie> findById(int id) {
+        return movieDao.findByIds(id);
+    }
+
+    @Override
     public LiveData<List<Movie>> findByIds(List<Integer> ids) {
         ArrayList<Movie> movies = new ArrayList<>();
         return new MutableLiveData<>(movies);

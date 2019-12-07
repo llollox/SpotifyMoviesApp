@@ -39,7 +39,7 @@ public class MovieDetailActivity extends DaggerAppCompatActivity {
         super.onCreate(savedInstanceState);
         this.binding = DataBindingUtil.setContentView(this, R.layout.movie_detail_activity);
         this.configureActionBar();
-        this.binding.setLayout(this.viewModel.getLayout());
+        this.viewModel.getLayout().observe(this, this.binding::setLayout);
     }
 
     @Override
@@ -55,7 +55,6 @@ public class MovieDetailActivity extends DaggerAppCompatActivity {
 
     // Private class methods ***********************************************************************
     private void configureActionBar() {
-        this.binding.toolbar.setTitle("Batman Begins");
         this.setSupportActionBar(this.binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

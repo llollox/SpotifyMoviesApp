@@ -22,6 +22,9 @@ public abstract class MovieDao {
         this.db = db;
     }
 
+    @Query("SELECT * FROM movies_table WHERE id = :id")
+    public abstract LiveData<Movie> findByIds(int id);
+
     @Query("SELECT * FROM movies_table WHERE id IN (:ids)")
     public abstract LiveData<List<Movie>> findByIds(List<Integer> ids);
 

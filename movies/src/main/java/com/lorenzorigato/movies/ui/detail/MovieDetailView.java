@@ -4,12 +4,14 @@ public interface MovieDetailView {
 
     class Layout {
         String coverUrl;
+        String title;
         String subtitle;
         String description;
         double rating;
 
-        public Layout(String coverUrl, String subtitle, String description, double rating) {
+        public Layout(String coverUrl, String title, String subtitle, String description, double rating) {
             this.coverUrl = coverUrl;
+            this.title = title;
             this.subtitle = subtitle;
             this.description = description;
             this.rating = rating;
@@ -17,6 +19,10 @@ public interface MovieDetailView {
 
         public String getCoverUrl() {
             return coverUrl;
+        }
+
+        public String getTitle() {
+            return title;
         }
 
         public String getSubtitle() {
