@@ -4,11 +4,11 @@ import com.lorenzorigato.base.model.entity.Movie;
 
 public class MovieLayoutMapper {
 
-    public MovieViewHolder.Layout mapToLayout(Movie movie, boolean isTop) {
+    public MovieViewHolder.Layout mapToLayout(Movie movie) {
         return new MovieViewHolder.Layout(
                 movie.getId(),
                 movie.getPosterFullPath(),
-                isTop,
+                movie.getRating() > 7.0,
                 movie.isFavorite());
     }
 }

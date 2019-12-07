@@ -42,9 +42,7 @@ public class SearchViewModel extends ViewModel {
     private LiveData<List<MovieViewHolder.Layout>> layouts = Transformations.map(this.movies, movies -> {
         ArrayList<MovieViewHolder.Layout> layouts = new ArrayList<>();
         for (Movie movie : movies) {
-            boolean isTop = movie.getRating() > 7.0;
-            MovieViewHolder.Layout layout = movieLayoutMapper.mapToLayout(movie, isTop);
-            layouts.add(layout);
+            layouts.add(this.movieLayoutMapper.mapToLayout(movie));
         }
         return layouts;
     });

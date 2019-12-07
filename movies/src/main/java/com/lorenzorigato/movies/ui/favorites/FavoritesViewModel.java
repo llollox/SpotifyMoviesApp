@@ -31,9 +31,7 @@ public class FavoritesViewModel extends ViewModel {
         this.state = Transformations.map(this.movies, movies -> {
             ArrayList<MovieViewHolder.Layout> layouts = new ArrayList<>();
             for (Movie movie : movies) {
-                boolean isTop = movie.getRating() > 7.0;
-                MovieViewHolder.Layout layout = this.movieLayoutMapper.mapToLayout(movie, isTop);
-                layouts.add(layout);
+                layouts.add(this.movieLayoutMapper.mapToLayout(movie));
             }
 
             return new FavoritesView.State(layouts, movies.isEmpty(), !movies.isEmpty());
