@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.protobuf.ProtoConverterFactory;
 
 @Module
 public class NetworkModule {
@@ -33,11 +34,11 @@ public class NetworkModule {
 
     @ApplicationScope
     @Provides
-    public static Retrofit providesRetrofit(OkHttpClient okHttpClient, GsonConverterFactory gsonConverterFactory, IConfiguration configuration) {
+    public static Retrofit providesRetrofit(OkHttpClient okHttpClient, ProtoConverterFactory protoConverterFactory, IConfiguration configuration) {
         return new Retrofit.Builder()
                 .baseUrl(configuration.getServerUrl())
                 .client(okHttpClient)
-                .addConverterFactory(gsonConverterFactory)
+                .addConverterFactory(protoConverterFactory)
                 .build();
     }
 
@@ -61,6 +62,12 @@ public class NetworkModule {
     @Provides
     public static GsonConverterFactory providesGsonConverterFactory() {
         return GsonConverterFactory.create();
+    }
+
+    @ApplicationScope
+    @Provides
+    public static ProtoConverterFactory providesProtoConverterFactory() {
+        return ProtoConverterFactory.create();
     }
 
     @ApplicationScope

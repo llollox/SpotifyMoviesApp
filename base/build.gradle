@@ -1,6 +1,11 @@
 apply plugin: 'com.android.library'
 apply plugin: 'org.jetbrains.dokka-android'
+apply plugin: 'com.google.protobuf'
 apply from: '../dependencies.gradle'
+
+sourceSets {
+    main.java.srcDirs += "${protobuf.generatedFilesBaseDir}/main/javalite"
+}
 
 android {
     compileSdkVersion versions.sdk.compile
@@ -53,4 +58,29 @@ dependencies {
     testImplementation dependency.testing.values()
     androidTestImplementation dependency.testingAndroid.values()
     debugImplementation dependency.debug.values()
+
+    implementation 'com.squareup.retrofit2:converter-protobuf:2.6.2'
+    implementation 'com.google.protobuf:protobuf-lite:3.0.0'
+    protobuf 'com.google.protobuf:protobuf-java:3.7.1'
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.0.0'
+    }
+    plugins {
+        javalite {
+            artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.0'
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                remove java
+            }
+            task.plugins {
+                javalite { }
+            }
+        }
+    }
 }

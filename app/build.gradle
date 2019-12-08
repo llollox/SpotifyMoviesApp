@@ -71,4 +71,7 @@ dependencies {
 
     debugImplementation dependency.debug.values()
     testImplementation dependency.testing.values()
+
+    implementation 'com.squareup.retrofit2:converter-protobuf:2.6.2'
+//    implementation 'com.google.protobuf:protobuf-lite:3.0.0'
 }
