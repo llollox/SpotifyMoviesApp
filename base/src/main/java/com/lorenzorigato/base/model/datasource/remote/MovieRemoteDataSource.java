@@ -44,7 +44,7 @@ public class MovieRemoteDataSource implements IMovieRemoteDataSource {
 
 
     @Override
-    public void fetchMovies(String genre, int offset, int pageSize, AsyncCallback<FetchMoviesResponse> callback) {
+    public void fetchMovies(String genre, int afterMovieId, int pageSize, AsyncCallback<FetchMoviesResponse> callback) {
         if (!this.reachabilityChecker.isInternetAvailable()) {
             if (callback != null) {
                 callback.onCompleted(new NoInternetError(), null);
@@ -52,7 +52,7 @@ public class MovieRemoteDataSource implements IMovieRemoteDataSource {
             return;
         }
 
-        this.movieService.getMovies(genre, offset, pageSize).enqueue(new Callback<MovieEnvelope>() {
+        this.movieService.getMovies(genre, afterMovieId, pageSize).enqueue(new Callback<MovieEnvelope>() {
             @Override
             public void onResponse(@NotNull Call<MovieEnvelope> call, @NotNull Response<MovieEnvelope> response) {
                 if (callback == null) {
@@ -71,8 +71,8 @@ public class MovieRemoteDataSource implements IMovieRemoteDataSource {
                         }
                     }
 
-                    int numTotalMovies = response.body().getMetadata().getTotal();
-                    FetchMoviesResponse fetchMoviesResponse = new FetchMoviesResponse(movies, actors, numTotalMovies);
+                    boolean isLastPage = response.body().getMetadata().isLastPage();
+                    FetchMoviesResponse fetchMoviesResponse = new FetchMoviesResponse(movies, actors, isLastPage);
                     callback.onCompleted(null, fetchMoviesResponse);
                 }
                 else {

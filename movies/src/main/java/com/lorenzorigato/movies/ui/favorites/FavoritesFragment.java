@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,7 +50,7 @@ public class FavoritesFragment extends DaggerFragment implements MovieAdapter.Li
         this.binding.viewMovieListLayout.movieListEmptyPlaceHolderTextView.setText(R.string.favorites_empty_placehoder);
         this.configureRecyclerView(this.binding.viewMovieListLayout.movieListRecyclerView);
         this.viewModel.getStatus().observe(this, this::handleStatusChanged);
-        this.viewModel.getState().observe(this, this::handleStateChanged);
+        this.viewModel.getLayouts().observe(this, this::handleLayoutsChanged);
         return this.binding.getRoot();
     }
 
@@ -91,9 +92,11 @@ public class FavoritesFragment extends DaggerFragment implements MovieAdapter.Li
         recyclerView.setAdapter(this.adapter);
     }
 
-    private void handleStateChanged(FavoritesView.State state) {
-        this.binding.setState(state);
-        this.adapter.submitList(state.getLayouts());
+    private void handleLayoutsChanged(PagedList<MovieViewHolder.Layout> layouts) {
+        boolean isRecyclerViewVisible = layouts != null && !layouts.isEmpty();
+        this.setRecyclerViewVisible(isRecyclerViewVisible);
+        this.setEmptyPlaceholderTextViewVisible(!isRecyclerViewVisible);
+        this.adapter.submitList(layouts);
     }
 
     private void handleStatusChanged(FavoritesView.Status status) {
@@ -103,5 +106,15 @@ public class FavoritesFragment extends DaggerFragment implements MovieAdapter.Li
                 Toast.makeText(getActivity(), R.string.favorites_error_unable_set_favorite, Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void setRecyclerViewVisible(boolean isVisible) {
+        int visibility = isVisible ? View.VISIBLE : View.GONE;
+        this.binding.viewMovieListLayout.movieListRecyclerView.setVisibility(visibility);
+    }
+
+    private void setEmptyPlaceholderTextViewVisible(boolean isVisible) {
+        int visibility = isVisible ? View.VISIBLE : View.GONE;
+        this.binding.viewMovieListLayout.movieListEmptyPlaceHolderTextView.setVisibility(visibility);
     }
 }

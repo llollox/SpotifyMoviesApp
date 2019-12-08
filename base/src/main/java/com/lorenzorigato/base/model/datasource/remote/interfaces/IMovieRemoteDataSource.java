@@ -11,12 +11,12 @@ public interface IMovieRemoteDataSource {
     class FetchMoviesResponse {
         private List<Movie> movies;
         private List<Actor> actors;
-        private int numTotalMovies;
+        private boolean isLastPage;
 
-        public FetchMoviesResponse(List<Movie> movies, List<Actor> actors, int numTotalMovies) {
+        public FetchMoviesResponse(List<Movie> movies, List<Actor> actors, boolean isLastPage) {
             this.movies = movies;
             this.actors = actors;
-            this.numTotalMovies = numTotalMovies;
+            this.isLastPage = isLastPage;
         }
 
         public List<Actor> getActors() { return actors; }
@@ -25,14 +25,12 @@ public interface IMovieRemoteDataSource {
             return movies;
         }
 
-        public int getNumTotalMovies() {
-            return numTotalMovies;
-        }
+        public boolean isLastPage() { return isLastPage; }
     }
 
     void fetchMovies(
             String genre,
-            int offset,
+            int afterMovieId,
             int pageSize,
             AsyncCallback<FetchMoviesResponse> callback);
 }

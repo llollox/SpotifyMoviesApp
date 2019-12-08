@@ -5,12 +5,12 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 
 import com.lorenzorigato.movies.databinding.ViewMovieListItemBinding;
 
-public class MovieAdapter extends ListAdapter<MovieViewHolder.Layout, MovieViewHolder> {
+public class MovieAdapter extends PagedListAdapter<MovieViewHolder.Layout, MovieViewHolder> {
 
 
     // Static **************************************************************************************

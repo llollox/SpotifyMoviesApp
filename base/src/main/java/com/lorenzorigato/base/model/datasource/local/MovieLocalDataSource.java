@@ -1,19 +1,18 @@
 package com.lorenzorigato.base.model.datasource.local;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+import androidx.paging.DataSource;
 
 import com.lorenzorigato.base.components.util.AsyncCallback;
 import com.lorenzorigato.base.database.dao.GenreMovieJoinDao;
 import com.lorenzorigato.base.database.dao.MovieDao;
+import com.lorenzorigato.base.database.error.RecordNotFoundError;
 import com.lorenzorigato.base.model.datasource.local.interfaces.IMovieLocalDataSource;
 import com.lorenzorigato.base.model.entity.Actor;
-import com.lorenzorigato.base.model.entity.Genre;
 import com.lorenzorigato.base.model.entity.GenreMovieJoin;
 import com.lorenzorigato.base.model.entity.Movie;
 import com.lorenzorigato.base.model.entity.MovieWithActors;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -39,31 +38,18 @@ public class MovieLocalDataSource implements IMovieLocalDataSource {
 
     // IMovieLocalDataSource methods ***************************************************************
     @Override
-    public LiveData<List<Movie>> findByGenreId(int genreId) {
-        return this.genreMovieJoinDao.findMoviesByGenreId(genreId);
+    public DataSource.Factory<Integer, Movie> findByGenreIdPaged(int genreId) {
+        return this.genreMovieJoinDao.findMoviesByGenreIdPaged(genreId);
     }
 
     @Override
-    public LiveData<List<Movie>> findFavorites() {
+    public DataSource.Factory<Integer, Movie> findFavorites() {
         return this.movieDao.findFavorites();
     }
 
     @Override
     public LiveData<MovieWithActors> findById(int id) {
-        return movieDao.findById(id);
-    }
-
-    @Override
-    public LiveData<List<Movie>> findByIds(List<Integer> ids) {
-        ArrayList<Movie> movies = new ArrayList<>();
-        return new MutableLiveData<>(movies);
-    }
-
-    @Override
-    public void findMoviesByGenre(Genre genre, AsyncCallback<List<Movie>> callback) {
-        if (callback != null) {
-            callback.onCompleted(null, new ArrayList<>());
-        }
+        return movieDao.findByIdWithActors(id);
     }
 
     @Override
@@ -98,9 +84,15 @@ public class MovieLocalDataSource implements IMovieLocalDataSource {
     }
 
     @Override
-    public void updateMovie(Movie movie, AsyncCallback<Movie> callback) {
+    public void toggleFavorite(int movieId, AsyncCallback<Movie> callback) {
         Single.create((SingleOnSubscribe<Movie>) emitter -> {
             try {
+                Movie movie = this.movieDao.findById(movieId);
+                if (movie == null) {
+                    emitter.onError(new RecordNotFoundError());
+                    return;
+                }
+                movie.setFavorite(!movie.isFavorite());
                 movieDao.insertAll(movie);
                 emitter.onSuccess(movie);
             } catch (Throwable t) {

@@ -41,8 +41,7 @@ public class MovieDetailViewModel extends ViewModel {
         MovieWithActors movieWithActors = this.movie.getValue();
         if (movieWithActors != null) {
             Movie movie = movieWithActors.getMovie();
-            movie.setFavorite(!movie.isFavorite());
-            this.movieRepository.update(movie, (error, updatedMovie) -> {
+            this.movieRepository.toggleFavorite(movie.getId(), (error, updatedMovie) -> {
                 if (error != null) {
                     this.status.setValue(MovieDetailView.Status.FAVORITE_NOT_SET_ERROR);
                 }

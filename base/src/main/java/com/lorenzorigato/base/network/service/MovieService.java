@@ -11,6 +11,6 @@ public interface MovieService {
     @GET("movies.json")
     Call<MovieEnvelope> getMovies(
             @Query("genre") String genre,
-            @Query("offset") int offset,
+            @Query("after") int afterMovieId,
             @Query("limit") int limit);
 }

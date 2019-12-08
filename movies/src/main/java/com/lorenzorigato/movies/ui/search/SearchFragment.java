@@ -21,10 +21,10 @@ import com.lorenzorigato.movies.databinding.SearchFragmentBinding;
 import com.lorenzorigato.movies.ui.component.movielist.MovieAdapter;
 import com.lorenzorigato.movies.ui.component.movielist.MovieViewHolder;
 import com.lorenzorigato.movies.ui.detail.MovieDetailActivity;
-import com.paginate.Paginate;
+
 import javax.inject.Inject;
+
 import dagger.android.support.DaggerFragment;
-import timber.log.Timber;
 
 public class SearchFragment extends DaggerFragment implements MovieAdapter.Listener{
 
@@ -32,7 +32,6 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
     // Class attributes ****************************************************************************
     @Inject
     SearchViewModel viewModel;
-    private Paginate paginate;
     private SearchFragmentBinding binding;
 
 
@@ -58,34 +57,17 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
 
         MovieAdapter adapter = new MovieAdapter(this);
         RecyclerView recyclerView = this.binding.viewMovieListLayout.movieListRecyclerView;
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        Paginate.Callbacks callbacks = new Paginate.Callbacks() {
-            @Override
-            public void onLoadMore() {
-                if (recyclerView.computeVerticalScrollOffset() > 0) {
-                    SearchFragment.this.viewModel.onLoadMore();
-                }
-            }
+        this.viewModel.getLayouts().observe(this, layouts -> {
+            boolean isRecyclerViewVisible = layouts != null && !layouts.isEmpty();
+            this.setRecyclerViewVisible(isRecyclerViewVisible);
+            this.setEmptyPlaceholderTextViewVisible(!isRecyclerViewVisible);
+            adapter.submitList(layouts);
+        });
 
-            @Override
-            public boolean isLoading() {
-                return SearchFragment.this.viewModel.isUpdateMoviesRunning();
-            }
-
-            @Override
-            public boolean hasLoadedAllItems() {
-                return SearchFragment.this.viewModel.hasLoadedAllMovies();
-            }
-        };
-
-//        this.paginate = Paginate.with(recyclerView, callbacks)
-//            .setLoadingTriggerThreshold(6)
-//            .addLoadingListItem(true)
-//            .build();
-
-        this.viewModel.getLayouts().observe(this, adapter::submitList);
         this.viewModel.getState().observe(this, this::handleStateChanged);
 
         return binding.getRoot();
@@ -109,8 +91,6 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
         this.binding.viewMovieListLayout.movieListRecyclerView.setAdapter(null);
         this.binding = null;
         this.viewModel = null;
-//        this.paginate.unbind();
-//        this.paginate = null;
     }
 
     // Private class methods ***********************************************************************
@@ -192,5 +172,15 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
     public void onMovieClicked(MovieViewHolder.Layout layout) {
         Intent intent = MovieDetailActivity.getCallingIntent(getActivity(), layout.getId());
         startActivity(intent);
+    }
+
+    private void setRecyclerViewVisible(boolean isVisible) {
+        int visibility = isVisible ? View.VISIBLE : View.GONE;
+        this.binding.viewMovieListLayout.movieListRecyclerView.setVisibility(visibility);
+    }
+
+    private void setEmptyPlaceholderTextViewVisible(boolean isVisible) {
+        int visibility = isVisible ? View.VISIBLE : View.GONE;
+        this.binding.viewMovieListLayout.movieListEmptyPlaceHolderTextView.setVisibility(visibility);
     }
 }

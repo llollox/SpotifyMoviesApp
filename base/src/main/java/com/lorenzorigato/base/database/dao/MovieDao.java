@@ -1,6 +1,7 @@
 package com.lorenzorigato.base.database.dao;
 
 import androidx.lifecycle.LiveData;
+import androidx.paging.DataSource;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -26,7 +27,11 @@ public abstract class MovieDao {
 
     @Transaction
     @Query("SELECT * FROM movies_table WHERE id = :id")
-    public abstract LiveData<MovieWithActors> findById(int id);
+    public abstract Movie findById(int id);
+
+    @Transaction
+    @Query("SELECT * FROM movies_table WHERE id = :id")
+    public abstract LiveData<MovieWithActors> findByIdWithActors(int id);
 
     @Query("SELECT * FROM movies_table WHERE id IN (:ids)")
     public abstract LiveData<List<Movie>> findByIds(List<Integer> ids);
@@ -35,7 +40,7 @@ public abstract class MovieDao {
     public abstract List<Movie> getAll();
 
     @Query("SELECT * FROM movies_table WHERE isFavorite = 1")
-    public abstract LiveData<List<Movie>> findFavorites();
+    public abstract DataSource.Factory<Integer, Movie> findFavorites();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertAll(Movie... movies);

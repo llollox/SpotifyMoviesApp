@@ -13,6 +13,7 @@ ext {
                     navigationFragment  : "androidx.navigation:navigation-fragment:${versions.architectureComponents.navigation}",
                     navigationUi        : "androidx.navigation:navigation-ui:${versions.architectureComponents.navigation}",
                     room                : "androidx.room:room-runtime:${versions.database.room}",
+                    paging              : "androidx.paging:paging-runtime:${versions.architectureComponents.paging}",
                     rxjava              : "io.reactivex.rxjava2:rxjava:${versions.architectureComponents.rxjava}",
                     rxjavaAndroid       : "io.reactivex.rxjava2:rxandroid:${versions.architectureComponents.rxjavaAndroid}"
             ],
@@ -72,7 +73,6 @@ ext {
             ui : [
                     appcompat            : "androidx.appcompat:appcompat:${versions.ui.appCompat}",
                     constraintLayout     : "androidx.constraintlayout:constraintlayout:${versions.ui.constraintLayout}",
-                    paging               : "com.github.markomilos:paginate:${versions.ui.paging}",
                     recyclerView         : "androidx.recyclerview:recyclerview:${versions.ui.recyclerView}"
             ],
 

@@ -1,17 +1,17 @@
 package com.lorenzorigato.base.model.repository;
 
 import androidx.lifecycle.LiveData;
+import androidx.paging.DataSource;
 
 import com.lorenzorigato.base.components.util.AsyncCallback;
-import com.lorenzorigato.base.database.error.RecordNotFoundError;
 import com.lorenzorigato.base.model.datasource.local.interfaces.IMovieLocalDataSource;
 import com.lorenzorigato.base.model.datasource.remote.interfaces.IMovieRemoteDataSource;
 import com.lorenzorigato.base.model.entity.Actor;
+import com.lorenzorigato.base.model.entity.Genre;
 import com.lorenzorigato.base.model.entity.GenreMovieJoin;
 import com.lorenzorigato.base.model.entity.Movie;
 import com.lorenzorigato.base.model.entity.MovieWithActors;
 import com.lorenzorigato.base.model.error.TaskAlreadyRunningError;
-import com.lorenzorigato.base.model.repository.interfaces.IGenreRepository;
 import com.lorenzorigato.base.model.repository.interfaces.IMovieRepository;
 
 import java.util.ArrayList;
@@ -20,21 +20,17 @@ import java.util.List;
 public class MovieRepository implements IMovieRepository {
 
     // Static **************************************************************************************
-    private static final int NETWORK_PAGE_SIZE = 20;
+    private static final int NETWORK_PAGE_SIZE = 30;
 
 
     // Private class attributes ********************************************************************
-    private IGenreRepository genreRepository;
     private IMovieLocalDataSource localDataSource;
     private IMovieRemoteDataSource remoteDataSource;
     private boolean isUpdateByGenreRunning = false;
 
 
     // Constructor *********************************************************************************
-    public MovieRepository(
-            IGenreRepository genreRepository,
-            IMovieLocalDataSource localDataSource, IMovieRemoteDataSource remoteDataSource) {
-        this.genreRepository = genreRepository;
+    public MovieRepository(IMovieLocalDataSource localDataSource, IMovieRemoteDataSource remoteDataSource) {
         this.localDataSource = localDataSource;
         this.remoteDataSource = remoteDataSource;
     }
@@ -42,32 +38,22 @@ public class MovieRepository implements IMovieRepository {
 
     // IMovieRepository methods ********************************************************************
     @Override
-    public boolean isUpdateByGenreRunning() {
-        return isUpdateByGenreRunning;
-    }
-
-    @Override
     public LiveData<MovieWithActors> findById(int id) {
         return this.localDataSource.findById(id);
     }
 
     @Override
-    public LiveData<List<Movie>> findFavorites() {
+    public DataSource.Factory<Integer, Movie> findFavorites() {
         return this.localDataSource.findFavorites();
     }
 
     @Override
-    public LiveData<List<Movie>> findByIds(List<Integer> ids) {
-        return this.localDataSource.findByIds(ids);
+    public DataSource.Factory<Integer, Movie> findByGenreIdPaged(int genreId) {
+        return this.localDataSource.findByGenreIdPaged(genreId);
     }
 
     @Override
-    public LiveData<List<Movie>> findByGenreId(int genreId) {
-        return this.localDataSource.findByGenreId(genreId);
-    }
-
-    @Override
-    public void updateByGenre(String genreName, final int offset, UpdateByGenreCallback callback) {
+    public void updateByGenre(Genre genre, Integer afterMovieId, UpdateByGenreCallback callback) {
 
         if (this.isUpdateByGenreRunning) {
             if (callback != null) {
@@ -78,89 +64,45 @@ public class MovieRepository implements IMovieRepository {
         }
 
         this.isUpdateByGenreRunning = true;
-        this.genreRepository.findByName(genreName, (genreError, genre) -> {
+        this.remoteDataSource.fetchMovies(genre.getName(), afterMovieId, NETWORK_PAGE_SIZE, (networkError, response) -> {
+            if (networkError != null) {
+                this.isUpdateByGenreRunning = false;
 
-            if (genre == null) {
-                // If the genre is not found into the db, then there is no possibility
-                // to find movies with that genre.
-                // For this reason simply return with an error.
                 if (callback != null) {
-                    callback.onCompleted(new RecordNotFoundError(), null, false);
+                    callback.onCompleted(networkError, null, false);
                 }
 
-                this.isUpdateByGenreRunning = false;
                 return;
             }
 
-            this.localDataSource.findMoviesByGenre(genre, (findMoviesError, moviesFromDb) -> {
+            int genreId = genre.getId();
+            List<Movie> movies = response.getMovies();
+            List<GenreMovieJoin> genreMovieJoins = this.mapToGenreMovieJoin(genreId, movies);
+            List<Actor> actors = response.getActors();
+            boolean isLastPage = response.isLastPage();
 
-                if (findMoviesError != null) {
-                    this.isUpdateByGenreRunning = false;
+            this.localDataSource.saveMovies(movies, genreMovieJoins, actors, (dbError, savedMovies) -> {
+                this.isUpdateByGenreRunning = false;
 
-                    if (callback != null) {
-                        callback.onCompleted(findMoviesError, null, false);
-                    }
+                if (callback == null) {
                     return;
                 }
 
-                if (!moviesFromDb.isEmpty() && offset < moviesFromDb.size()) {
-                    // If movies are already present in db and
-                    // the offset is within the number of movies into the db, than reply immediately
-                    // HasLoadedAllMovies is false because since the request hasn't performed,
-                    // maybe the db doesn't have all movies because others are still in the server.
-                    // (Or they has been loaded later)
-                    this.isUpdateByGenreRunning = false;
-
-                    if (callback != null) {
-                        callback.onCompleted(null, moviesFromDb, false);
-                    }
-                    return;
+                if (dbError == null) {
+                    callback.onCompleted(null, savedMovies, isLastPage);
+                } else {
+                    callback.onCompleted(dbError, null, false);
                 }
 
-                // Otherwise perform the network request to get the first page of movies
-                // and once the movies are retrieved, then save them into the database.
-                // Finally notify the caller.
-                this.remoteDataSource.fetchMovies(genreName, offset, NETWORK_PAGE_SIZE, (networkError, response) -> {
-                    if (networkError != null) {
-                        this.isUpdateByGenreRunning = false;
-
-                        if (callback != null) {
-                            callback.onCompleted(networkError, null, false);
-                        }
-
-                        return;
-                    }
-
-                    int genreId = genre.getId();
-                    List<Movie> movies = response.getMovies();
-                    List<GenreMovieJoin> genreMovieJoins = this.mapToGenreMovieJoin(genreId, movies);
-                    List<Actor> actors = response.getActors();
-                    boolean hasLoadedAllMovies = offset + movies.size() >= response.getNumTotalMovies();
-
-                    this.localDataSource.saveMovies(movies, genreMovieJoins, actors, (dbError, savedMovies) -> {
-                        this.isUpdateByGenreRunning = false;
-
-                        if (callback == null) {
-                            return;
-                        }
-
-                        if (dbError == null) {
-                            callback.onCompleted(null, savedMovies, hasLoadedAllMovies);
-                        } else {
-                            callback.onCompleted(dbError, null, false);
-                        }
-
-                    });
-                });
             });
         });
     }
 
-    @Override
-    public void update(Movie movie, AsyncCallback<Movie> callback) {
-        this.localDataSource.updateMovie(movie, callback);
-    }
 
+    @Override
+    public void toggleFavorite(int movieId, AsyncCallback<Movie> callback) {
+        this.localDataSource.toggleFavorite(movieId, callback);
+    }
 
     // Private class methods ***********************************************************************
     private List<GenreMovieJoin> mapToGenreMovieJoin(int genreId, List<Movie> movies) {

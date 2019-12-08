@@ -2,12 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-    <data>
-        <variable
-            name="state"
-            type="com.lorenzorigato.movies.ui.favorites.FavoritesView.State" />
-    </data>
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -17,8 +11,8 @@
             android:id="@+id/view_movie_list_layout"
             layout="@layout/view_movies_list"
             bind:isProgressBarVisible="@{false}"
-            bind:isEmptyTextViewVisible="@{state.emptyTextViewVisible}"
-            bind:isRecyclerViewVisible="@{state.recyclerViewVisible}"/>
+            bind:isEmptyTextViewVisible="@{true}"
+            bind:isRecyclerViewVisible="@{false}" />
 
     </LinearLayout>
 </layout>

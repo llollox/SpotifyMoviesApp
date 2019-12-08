@@ -27,10 +27,9 @@ public class RepositoryModule {
     @ApplicationScope
     @Provides
     public static IMovieRepository providesMovieRepository(
-            IGenreRepository genreRepository,
             IMovieLocalDataSource localDataSource,
             IMovieRemoteDataSource remoteDataSource) {
 
-        return new MovieRepository(genreRepository, localDataSource, remoteDataSource);
+        return new MovieRepository(localDataSource, remoteDataSource);
     }
 }

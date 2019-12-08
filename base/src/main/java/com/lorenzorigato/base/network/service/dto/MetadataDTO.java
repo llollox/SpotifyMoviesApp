@@ -3,27 +3,23 @@ package com.lorenzorigato.base.network.service.dto;
 public class MetadataDTO {
 
     // Class attributes ****************************************************************************
-    int offset;
+    boolean isLastPage;
     int limit;
     int total;
 
 
     // Constructor *********************************************************************************
-    public MetadataDTO(int offset, int limit, int total) {
-        this.offset = offset;
+    public MetadataDTO(boolean isLastPage, int limit, int total) {
+        this.isLastPage = isLastPage;
         this.limit = limit;
         this.total = total;
     }
 
 
     // Class methods *******************************************************************************
-    public int getOffset() {
-        return offset;
-    }
+    public boolean isLastPage() { return isLastPage; }
 
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
+    public void setLastPage(boolean lastPage) { isLastPage = lastPage; }
 
     public int getLimit() {
         return limit;
@@ -44,7 +40,7 @@ public class MetadataDTO {
     @Override
     public String toString() {
         return "MetadataDTO{" +
-                "offset=" + offset +
+                "isLastPage=" + isLastPage +
                 ", limit=" + limit +
                 ", total=" + total +
                 '}';
