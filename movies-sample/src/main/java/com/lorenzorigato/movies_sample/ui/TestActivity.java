@@ -46,8 +46,8 @@ public class TestActivity extends DaggerAppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.serverUrl = this.configuration.getServerUrl();
-        this.startFavoritesFragment();
-//        this.startDetailActivity();
+//        this.startFavoritesFragment();
+        this.startDetailActivity();
     }
 
     @SuppressLint("CheckResult")

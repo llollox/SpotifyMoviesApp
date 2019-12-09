@@ -35,6 +35,7 @@
             android:layout_gravity="bottom|end"
             android:contentDescription="@string/search_top_movie_content_descriptor"
             android:layout_margin="@dimen/two_grid_unit"
+            android:importantForAccessibility="no"
             android:src="@drawable/ic_star"
             android:visibility="@{layout.isTop ? View.VISIBLE : View.GONE}"
             tools:visibility="visible"/>
