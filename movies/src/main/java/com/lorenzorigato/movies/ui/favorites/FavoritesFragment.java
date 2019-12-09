@@ -14,6 +14,7 @@ import androidx.paging.PagedList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.lorenzorigato.movies.R;
 import com.lorenzorigato.movies.databinding.FavoritesFragmentBinding;
 import com.lorenzorigato.movies.ui.component.movielist.MovieAdapter;
@@ -99,6 +100,14 @@ public class FavoritesFragment extends DaggerFragment implements MovieAdapter.Li
 
     private void handleStatusChanged(FavoritesView.Status status) {
         switch (status) {
+
+            case FAVORITE_ADD_SUCCESS:
+                Snackbar.make(this.binding.getRoot(), R.string.favorites_movie_added_success, Snackbar.LENGTH_SHORT).show();
+                break;
+
+            case FAVORITE_REMOVED_SUCCESS:
+                Snackbar.make(this.binding.getRoot(), R.string.favorites_movie_removed_success, Snackbar.LENGTH_SHORT).show();
+                break;
 
             case FAVORITE_NOT_SET_ERROR:
                 Toast.makeText(getActivity(), R.string.favorites_error_unable_set_favorite, Toast.LENGTH_SHORT).show();

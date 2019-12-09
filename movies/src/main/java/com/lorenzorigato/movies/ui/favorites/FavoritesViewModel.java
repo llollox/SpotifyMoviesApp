@@ -48,9 +48,17 @@ public class FavoritesViewModel extends ViewModel {
     public LiveData<PagedList<MovieViewHolder.Layout>> getLayouts() { return this.layouts; }
 
     public void onToggleFavorite(MovieViewHolder.Layout layout) {
-        this.movieRepository.toggleFavorite(layout.getId(), (error, data) -> {
+        this.movieRepository.toggleFavorite(layout.getId(), (error, updatedMovie) -> {
             if (error != null) {
                 this.status.setValue(FavoritesView.Status.FAVORITE_NOT_SET_ERROR);
+            }
+            else {
+                if (updatedMovie.isFavorite()) {
+                    this.status.setValue(FavoritesView.Status.FAVORITE_ADD_SUCCESS);
+                }
+                else {
+                    this.status.setValue(FavoritesView.Status.FAVORITE_REMOVED_SUCCESS);
+                }
             }
         });
     }
