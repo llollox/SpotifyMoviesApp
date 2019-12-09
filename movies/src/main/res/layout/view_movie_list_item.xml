@@ -15,7 +15,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@{layout.title}"
+        android:contentDescription="@{layout.isTop ? String.format(@string/search_top_movie_content_descriptor, layout.title) : layout.title}"
         android:layout_margin="@dimen/one_grid_unit"
         tools:layout_width="@dimen/twenty_grid_unit">
 

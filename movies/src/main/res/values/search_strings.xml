@@ -2,7 +2,7 @@
 <resources>
     <string name="search">Search</string>
     <string name="search_empty_place_holder">Please enter a genre to find movies e.g. Action</string>
-    <string name="search_top_movie_content_descriptor">This is a top movie.</string>
+    <string name="search_top_movie_content_descriptor">%1$s. This is a top movie.</string>
 
     <!--  Errors  -->
     <string name="search_invalid_genre_error">Invalid genre</string>
