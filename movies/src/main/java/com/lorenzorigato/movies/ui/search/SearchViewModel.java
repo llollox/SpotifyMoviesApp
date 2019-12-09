@@ -42,7 +42,8 @@ public class SearchViewModel extends ViewModel {
                 .map(movie -> this.movieLayoutMapper.mapToLayout(movie));
 
         PagedList.Config config = new PagedList.Config.Builder()
-//                .setPrefetchDistance(0)
+                .setPrefetchDistance(DATABASE_PAGE_SIZE)
+                .setEnablePlaceholders(true)
                 .setInitialLoadSizeHint(DATABASE_PAGE_SIZE)
                 .setPageSize(DATABASE_PAGE_SIZE)
                 .build();
