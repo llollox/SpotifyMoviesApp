@@ -93,7 +93,7 @@ public class MovieLocalDataSource implements IMovieLocalDataSource {
                     return;
                 }
                 movie.setFavorite(!movie.isFavorite());
-                movieDao.insertAll(movie);
+                movieDao.insert(movie);
                 emitter.onSuccess(movie);
             } catch (Throwable t) {
                 emitter.onError(t);

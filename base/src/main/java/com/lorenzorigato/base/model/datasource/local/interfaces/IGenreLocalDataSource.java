@@ -10,6 +10,5 @@ import java.util.List;
 public interface IGenreLocalDataSource {
 
     LiveData<Genre> findByName(String name);
-    void findByName(String name, AsyncCallback<Genre> callback);
     void saveGenres(List<Genre> genres, AsyncCallback<List<Genre>> callback);
 }

@@ -1,5 +1,7 @@
 package com.lorenzorigato.base.model.datasource.local;
 
+import android.annotation.SuppressLint;
+
 import androidx.lifecycle.LiveData;
 
 import com.lorenzorigato.base.components.util.AsyncCallback;
@@ -34,14 +36,7 @@ public class GenreLocalDataSource implements IGenreLocalDataSource {
         return this.genreDao.findByNameLiveData(name);
     }
 
-    @Override
-    public void findByName(String name, AsyncCallback<Genre> callback) {
-        if (callback != null) {
-            Genre genre = new Genre(1, "Action");
-            callback.onCompleted(null, genre);
-        }
-    }
-
+    @SuppressLint("CheckResult")
     @Override
     public void saveGenres(List<Genre> genres, AsyncCallback<List<Genre>> callback) {
 

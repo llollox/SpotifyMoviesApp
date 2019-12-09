@@ -10,6 +10,5 @@ import java.util.List;
 public interface IGenreRepository {
 
     LiveData<Genre> findByName(String name);
-    void findByName(String name, AsyncCallback<Genre> callback);
     void updateAll(AsyncCallback<List<Genre>> callback);
 }

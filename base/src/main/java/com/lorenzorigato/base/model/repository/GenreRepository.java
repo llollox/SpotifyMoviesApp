@@ -34,11 +34,6 @@ public class GenreRepository implements IGenreRepository {
         return this.localDataSource.findByName(name);
     }
 
-    @Override
-    public void findByName(String name, AsyncCallback<Genre> callback) {
-        this.localDataSource.findByName(name, callback);
-    }
-
     /**
      * Genres are always fetched from network because the list can change during time.
      * This has two impacts on the application:
