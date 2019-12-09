@@ -8,4 +8,9 @@ public class AppConfiguration implements IConfiguration {
     public String getServerUrl() {
         return "http://10.0.2.2:3000/";
     }
+
+    @Override
+    public String getDbName() {
+        return "movies_sample_db_dev";
+    }
 }

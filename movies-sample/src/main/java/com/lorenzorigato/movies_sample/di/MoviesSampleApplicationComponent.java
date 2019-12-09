@@ -2,13 +2,13 @@ package com.lorenzorigato.movies_sample.di;
 
 import android.app.Application;
 
+import com.lorenzorigato.base.di.module.RepositoryModule;
 import com.lorenzorigato.base.di.module.SecurityModule;
 import com.lorenzorigato.base.di.scope.ApplicationScope;
 import com.lorenzorigato.movies.di.MoviesModule;
 import com.lorenzorigato.movies_sample.MoviesSampleApplication;
 import com.lorenzorigato.movies_sample.di.module.ActivityModule;
 import com.lorenzorigato.movies_sample.di.module.ConfigModule;
-import com.lorenzorigato.movies_sample.di.module.FakeRepositoryModule;
 import com.lorenzorigato.movies_sample.di.module.NavigatorModule;
 import com.lorenzorigato.movies_sample.di.module.UtilModule;
 
@@ -25,7 +25,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
           SecurityModule.class,
           NavigatorModule.class,
           UtilModule.class,
-          FakeRepositoryModule.class,
+          RepositoryModule.class,
           MoviesModule.class,
           ConfigModule.class}
 )

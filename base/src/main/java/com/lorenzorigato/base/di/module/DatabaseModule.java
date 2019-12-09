@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.room.Room;
 
+import com.lorenzorigato.base.config.interfaces.IConfiguration;
 import com.lorenzorigato.base.database.SpotifyMoviesDatabase;
 import com.lorenzorigato.base.di.scope.ApplicationScope;
 
@@ -15,10 +16,10 @@ public class DatabaseModule {
     
     @ApplicationScope
     @Provides
-    public static SpotifyMoviesDatabase providesDatabase(Application application) {
+    public static SpotifyMoviesDatabase providesDatabase(Application application, IConfiguration configuration) {
         return Room.databaseBuilder(
                 application.getApplicationContext(),
-                SpotifyMoviesDatabase.class, "spotify_movies_database")
+                SpotifyMoviesDatabase.class, configuration.getDbName())
             .build();
     }
 }

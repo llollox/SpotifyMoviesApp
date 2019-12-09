@@ -8,4 +8,9 @@ public class AppConfiguration implements IConfiguration {
     public String getServerUrl() {
         return "https://www.spotifymovies.com/";
     }
+
+    @Override
+    public String getDbName() {
+        return "movies_sample_db_prod";
+    }
 }

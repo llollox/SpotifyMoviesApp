@@ -3,7 +3,7 @@ package com.lorenzorigato.movies_sample.util;
 import com.lorenzorigato.base.util.IAppInfo;
 import com.lorenzorigato.movies_sample.BuildConfig;
 
-public class AppInfo implements IAppInfo {
+public class FakeAppInfo implements IAppInfo {
 
     @Override
     public String getApplicationId() {

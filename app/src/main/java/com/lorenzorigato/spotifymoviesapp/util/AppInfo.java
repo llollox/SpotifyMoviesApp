@@ -5,7 +5,6 @@ import com.lorenzorigato.spotifymoviesapp.BuildConfig;
 
 public class AppInfo implements IAppInfo {
 
-    @Override
     public String getApplicationId() {
         return BuildConfig.APPLICATION_ID;
     }
