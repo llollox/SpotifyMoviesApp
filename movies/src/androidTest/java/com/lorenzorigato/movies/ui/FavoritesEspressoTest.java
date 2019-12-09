@@ -2,10 +2,14 @@ package com.lorenzorigato.movies.ui;
 
 import android.app.Instrumentation;
 import android.content.Context;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
+import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -36,19 +40,22 @@ import okhttp3.mockwebserver.MockWebServer;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.pressBack;
 import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.lorenzorigato.movies.matcher.DrawableMatcher.withDrawable;
+import static com.lorenzorigato.movies.action.RecyclerViewActions.clickChildViewWithId;
 
-public class MovieDetailEspressoTest {
+public class FavoritesEspressoTest {
 
     // Static **************************************************************************************
-    public static List<Genre> VALID_GENRES = new ArrayList<>();
+    private static List<Genre> VALID_GENRES = new ArrayList<>();
     private static MovieEnvelope VALID_MOVIE_ENVELOPER = getMovieEnvelope();
+
     static {
         VALID_GENRES.add(new Genre(1, "Action"));
         VALID_GENRES.add(new Genre(2, "Adventure"));
@@ -89,16 +96,17 @@ public class MovieDetailEspressoTest {
         return new MovieEnvelope(metadataDTO, movieDTOS);
     }
 
+
     // Private class attributes ********************************************************************
     private Context context;
     private MockWebServer webServer;
-    private MovieDTO movieDTO;
 
     @Rule
     public ActivityTestRule<MoviesActivity> activityRule = new ActivityTestRule<>(MoviesActivity.class, true, false);
 
     @Before
-    public void setup() throws IOException {
+    public void setup() {
+
         Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
         this.context = instrumentation.getTargetContext().getApplicationContext();
         MoviesApplication moviesApplication = (MoviesApplication) this.context;
@@ -113,8 +121,6 @@ public class MovieDetailEspressoTest {
                 .setBody(new Gson().toJson(VALID_GENRES));
 
         this.webServer.enqueue(genresResponse);
-
-        this.searchForActionMovies();
     }
 
     @After
@@ -123,45 +129,100 @@ public class MovieDetailEspressoTest {
     }
 
 
-    // Tests methods *******************************************************************************
+    // Test methods ********************************************************************************
     @Test
-    public void detail__verifyInformationShownProperly() {
+    public void favorites__verifyInitialMessage() throws IOException {
+        this.webServer.start(8080);
+        this.activityRule.launchActivity(null);
+
+        this.goToFavorites();
+
+        String initialMessage = this.context.getString(R.string.favorites_empty_placehoder);
+
+        // Verify the initial message is shown to the user
+        onView(withId(R.id.movieList_emptyPlaceHolder__textView))
+                .check(matches(withText(initialMessage)));
+    }
+
+
+    @Test
+    public void favorites__whenSetFavoriteFromDetail__seeMovieInFavorites() throws IOException {
+        this.searchForActionMovies();
 
         // Click on first item of Recycler View to go to Movie Detail
         onView(withId(R.id.movieList_recyclerView))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        MovieDTO movieDTO = VALID_MOVIE_ENVELOPER.getData().get(0);
+        // Click on fab to set movie as favorite
+        onView(withId(R.id.fab)).perform(click());
 
-        // Verify movie detail screen shows proper information
-        onView(withId(R.id.movie_subtitle_textview))
-                .check(matches(withText(movieDTO.getSubtitle())));
+        // Press back button to return to search screen
+        onView(ViewMatchers.isRoot()).perform(pressBack());
 
-        onView(withId(R.id.movie_rating_textview))
-                .check(matches(withText(String.valueOf(movieDTO.getRating()))));
+        this.closeSearchView();
 
-        onView(withId(R.id.movie_description_textview))
-                .check(matches(withText(movieDTO.getDescription())));
+        this.goToFavorites();
 
-        onView(withId(R.id.movie_detail_actors_recycler_view))
-                .check(new RecyclerViewItemCountAssertion(movieDTO.getCast().size()));
-
-        onView(withId(R.id.fab))
-                .check(matches(withDrawable(R.drawable.ic_favorite_border_white_24dp)));
-
-        // Verify movie detail screen shows proper information
-        onView(withId(R.id.fab))
-                .perform(click());
-
-        // Verify fab changes icon
-        onView(withId(R.id.fab))
-                .check(matches(withDrawable(R.drawable.ic_favorite_white_24dp)));
-
-        // Snackbar shown
-        onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(withText(R.string.favorites_movie_added_success)));
+        onView(withId(R.id.movieList_recyclerView))
+                .check(new RecyclerViewItemCountAssertion(1));
     }
 
+    @Test
+    public void favorites__whenSetFavoriteFromList__seeMovieInFavorites() throws IOException {
+        this.searchForActionMovies();
+
+        // Set first movie as favorite
+        onView(withId(R.id.movieList_recyclerView)).perform(
+            RecyclerViewActions.actionOnItemAtPosition(0, clickChildViewWithId(R.id.imageView_movieListItem_favorite)));
+
+        this.closeSearchView();
+
+        this.goToFavorites();
+
+        onView(withId(R.id.movieList_recyclerView))
+                .check(new RecyclerViewItemCountAssertion(1));
+
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Click remove favorites from first item
+        onView(withId(R.id.movieList_recyclerView)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(0, clickChildViewWithId(R.id.imageView_movieListItem_favorite)));
+
+        // Wait for ListAdapter update that are triggered in a background thread
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onView(withId(R.id.movieList_recyclerView))
+                .check(new RecyclerViewItemCountAssertion(0));
+    }
+
+
+    // Private class methods ***********************************************************************
+    private void closeSearchView() {
+        // Press back button to return to close search bar
+        // There is a bug into the SearchView and I have to call pressBack twice in order to close it.
+        // https://stackoverflow.com/questions/49574935/android-espresso-closing-the-searchview
+        onView(ViewMatchers.isRoot()).perform(pressBack());
+        onView(ViewMatchers.isRoot()).perform(pressBack());
+    }
+
+    private void goToFavorites() {
+        // Open Drawer to click on navigation.
+        onView(withId(R.id.drawer_layout))
+                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .perform(DrawerActions.open()); // Open Drawer
+
+        // Start the screen of your activity.
+        onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.favorites_fragment_dest));
+    }
 
     private void searchForActionMovies() throws IOException {
         try {

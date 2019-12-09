@@ -67,7 +67,7 @@ public class SearchMoviesEspressoTest {
     public ActivityTestRule<MoviesActivity> activityRule = new ActivityTestRule<>(MoviesActivity.class, true, false);
 
     @Before
-    public void setup() {
+    public void setup() throws InterruptedException {
 
         Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
         this.context = instrumentation.getTargetContext().getApplicationContext();
@@ -77,11 +77,13 @@ public class SearchMoviesEspressoTest {
         database.clearAllTables();
 
         this.webServer = new MockWebServer();
+        Thread.sleep(200);
     }
 
     @After
-    public void tearDown() throws IOException {
+    public void tearDown() throws IOException, InterruptedException {
         this.webServer.shutdown();
+        Thread.sleep(200);
     }
 
 
@@ -122,7 +124,9 @@ public class SearchMoviesEspressoTest {
     }
 
     @Test
-    public void search__whenTypeWrongGenre__verifyErrorMessageShown() throws IOException {
+    public void search__whenTypeWrongGenre__verifyErrorMessageShown() throws IOException, InterruptedException {
+        Thread.sleep(1000);
+
         MockResponse genresResponse = new MockResponse()
                 .setResponseCode(200)
                 .setBody(new Gson().toJson(VALID_GENRES));
@@ -201,5 +205,9 @@ public class SearchMoviesEspressoTest {
 
         // Verify count number items in Recycler View
         onView(withId(R.id.movieList_recyclerView)).check(new RecyclerViewItemCountAssertion(1));
+    }
+
+    private void loadGenres() {
+
     }
 }
