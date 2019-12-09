@@ -49,6 +49,7 @@ ext {
             ],
 
             networking : [
+                    conscrypt            : "org.conscrypt:conscrypt-android:${versions.networking.conscrypt}",
                     gson                 : "com.google.code.gson:gson:${versions.networking.gson}",
                     loggingInterceptor   : "com.squareup.okhttp3:logging-interceptor:${versions.networking.logginInterceptor}",
                     retrofit             : "com.squareup.retrofit2:retrofit:${versions.networking.retrofit}",
