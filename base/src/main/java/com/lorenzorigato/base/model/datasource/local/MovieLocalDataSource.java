@@ -1,5 +1,7 @@
 package com.lorenzorigato.base.model.datasource.local;
 
+import android.annotation.SuppressLint;
+
 import androidx.lifecycle.LiveData;
 import androidx.paging.DataSource;
 
@@ -52,6 +54,7 @@ public class MovieLocalDataSource implements IMovieLocalDataSource {
         return movieDao.findByIdWithActors(id);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void saveMovies(List<Movie> movies, List<GenreMovieJoin> genreMovieJoins, List<Actor> actors, AsyncCallback<List<Movie>> callback) {
 
@@ -83,6 +86,7 @@ public class MovieLocalDataSource implements IMovieLocalDataSource {
         });
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void toggleFavorite(int movieId, AsyncCallback<Movie> callback) {
         Single.create((SingleOnSubscribe<Movie>) emitter -> {

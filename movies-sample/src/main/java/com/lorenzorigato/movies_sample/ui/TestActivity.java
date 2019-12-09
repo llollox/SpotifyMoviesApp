@@ -61,7 +61,8 @@ public class TestActivity extends DaggerAppCompatActivity {
         Single.create((SingleOnSubscribe<Boolean>) emitter -> {
             try {
                 this.db.clearAllTables();
-                this.db.getMovieDao().insertAll(batman, casinoRoyale);
+                this.db.getMovieDao().insert(batman);
+                this.db.getMovieDao().insert(casinoRoyale);
                 emitter.onSuccess(true);
             } catch (Throwable t) {
                 emitter.onError(t);
