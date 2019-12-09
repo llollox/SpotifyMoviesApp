@@ -93,10 +93,8 @@ public class FavoritesFragment extends DaggerFragment implements MovieAdapter.Li
     }
 
     private void handleLayoutsChanged(PagedList<MovieViewHolder.Layout> layouts) {
-        boolean isRecyclerViewVisible = layouts != null && !layouts.isEmpty();
-        this.setRecyclerViewVisible(isRecyclerViewVisible);
-        this.setEmptyPlaceholderTextViewVisible(!isRecyclerViewVisible);
         this.adapter.submitList(layouts);
+        this.binding.setLayouts(layouts);
     }
 
     private void handleStatusChanged(FavoritesView.Status status) {
@@ -106,15 +104,5 @@ public class FavoritesFragment extends DaggerFragment implements MovieAdapter.Li
                 Toast.makeText(getActivity(), R.string.favorites_error_unable_set_favorite, Toast.LENGTH_SHORT).show();
                 break;
         }
-    }
-
-    private void setRecyclerViewVisible(boolean isVisible) {
-        int visibility = isVisible ? View.VISIBLE : View.GONE;
-        this.binding.viewMovieListLayout.movieListRecyclerView.setVisibility(visibility);
-    }
-
-    private void setEmptyPlaceholderTextViewVisible(boolean isVisible) {
-        int visibility = isVisible ? View.VISIBLE : View.GONE;
-        this.binding.viewMovieListLayout.movieListEmptyPlaceHolderTextView.setVisibility(visibility);
     }
 }

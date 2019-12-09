@@ -2,6 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="layouts"
+            type="androidx.paging.PagedList" />
+
+        <import type="android.view.View" />
+    </data>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -11,8 +19,8 @@
             android:id="@+id/view_movie_list_layout"
             layout="@layout/view_movies_list"
             bind:isProgressBarVisible="@{false}"
-            bind:isEmptyTextViewVisible="@{true}"
-            bind:isRecyclerViewVisible="@{false}" />
+            bind:isEmptyTextViewVisible="@{layouts == null || layouts.isEmpty()}"
+            bind:isRecyclerViewVisible="@{layouts != null &amp;&amp; !layouts.isEmpty()}" />
 
     </LinearLayout>
 </layout>

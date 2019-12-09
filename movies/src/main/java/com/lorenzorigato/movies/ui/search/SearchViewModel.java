@@ -35,9 +35,7 @@ public class SearchViewModel extends ViewModel {
     private MutableLiveData<String> genreName = new MutableLiveData<>();
     private LiveData<Genre> genre = Transformations.switchMap(this.genreName, name -> this.genreRepository.findByName(name));
     private LiveData<PagedList<MovieViewHolder.Layout>> layouts = Transformations.switchMap(this.genre, genre -> {
-        MovieBoundaryCallback boundaryCallback = new MovieBoundaryCallback(
-                genre,
-                this.movieRepository);
+        MovieBoundaryCallback boundaryCallback = new MovieBoundaryCallback(genre, this.movieRepository);
 
         DataSource.Factory<Integer, MovieViewHolder.Layout> factory = this.movieRepository
                 .findByGenreIdPaged(genre.getId())
