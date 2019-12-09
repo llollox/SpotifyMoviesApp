@@ -8,6 +8,7 @@ public class MovieLayoutMapper {
         if (movie == null) {
             return new MovieViewHolder.Layout(
                     0,
+                    "",
                     "loading.jpg",
                     false,
                     false);
@@ -15,6 +16,7 @@ public class MovieLayoutMapper {
         else {
             return new MovieViewHolder.Layout(
                     movie.getId(),
+                    movie.getTitle(),
                     movie.getPosterFullPath(),
                     movie.getRating() > 7.0,
                     movie.isFavorite());

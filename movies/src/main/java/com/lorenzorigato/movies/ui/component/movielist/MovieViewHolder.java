@@ -13,12 +13,14 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
     // Static **************************************************************************************
     public static class Layout {
         private int id;
+        private String title;
         private String posterUrl;
         private boolean isFavorite;
         private boolean isTop;
 
-        public Layout(int id, String posterUrl, boolean isTop, boolean isFavorite) {
+        public Layout(int id, String title, String posterUrl, boolean isTop, boolean isFavorite) {
             this.id = id;
+            this.title = title;
             this.posterUrl = posterUrl;
             this.isFavorite = isFavorite;
             this.isTop = isTop;
@@ -32,28 +34,18 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
             this.id = id;
         }
 
+        public String getTitle() { return title; }
+
         public String getPosterUrl() {
             return posterUrl;
-        }
-
-        public void setPosterUrl(String posterUrl) {
-            this.posterUrl = posterUrl;
         }
 
         public boolean isFavorite() {
             return isFavorite;
         }
 
-        public void setFavorite(boolean favorite) {
-            isFavorite = favorite;
-        }
-
         public boolean isTop() {
             return isTop;
-        }
-
-        public void setTop(boolean top) {
-            isTop = top;
         }
 
         @Override
@@ -64,12 +56,13 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
             return id == layout.id &&
                     isFavorite == layout.isFavorite &&
                     isTop == layout.isTop &&
+                    Objects.equals(title, layout.title) &&
                     Objects.equals(posterUrl, layout.posterUrl);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, posterUrl, isFavorite, isTop);
+            return Objects.hash(id, title, posterUrl, isFavorite, isTop);
         }
     }
 

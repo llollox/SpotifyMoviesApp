@@ -15,6 +15,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:contentDescription="@{layout.title}"
         android:layout_margin="@dimen/one_grid_unit"
         tools:layout_width="@dimen/twenty_grid_unit">
 
@@ -32,6 +33,7 @@
             android:layout_width="@dimen/five_grid_unit"
             android:layout_height="@dimen/five_grid_unit"
             android:layout_gravity="bottom|end"
+            android:contentDescription="@string/search_top_movie_content_descriptor"
             android:layout_margin="@dimen/two_grid_unit"
             android:src="@drawable/ic_star"
             android:visibility="@{layout.isTop ? View.VISIBLE : View.GONE}"
@@ -41,6 +43,7 @@
             android:id="@+id/imageView_movieListItem_favorite"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/seven_grid_unit"
+            android:contentDescription="@{layout.favorite ? @string/favorites_remove_btn : @string/favorites_add_btn}"
             android:adjustViewBounds="true"
             android:src="@drawable/selector_favorite"
             app:srcCompat="@drawable/selector_favorite" />

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="favorites_empty_placehoder">No favorites selected</string>
+    <string name="favorites_add_btn">Add movie to favorites</string>
+    <string name="favorites_remove_btn">Remove movie from favorites</string>
     <string name="favorites_movie_added_success">Movie added to favorites!</string>
     <string name="favorites_movie_removed_success">Movie removed from favorites!</string>
     <string name="favorites_error_unable_set_favorite">Something went wrong! Unable set favorites right now. Please retry later.</string>
