@@ -16,6 +16,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.lorenzorigato.movies.R;
 import com.lorenzorigato.movies.databinding.SearchFragmentBinding;
 import com.lorenzorigato.movies.ui.component.movielist.MovieAdapter;
@@ -106,6 +107,14 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
 
             case MOVIES_NOT_LOADED_ERROR:
                 Toast.makeText(getActivity(), R.string.search_error_movies_not_loaded, Toast.LENGTH_SHORT).show();
+                break;
+
+            case FAVORITE_ADD_SUCCESS:
+                Snackbar.make(this.binding.getRoot(), R.string.favorites_movie_added_success, Snackbar.LENGTH_SHORT).show();
+                break;
+
+            case FAVORITE_REMOVED_SUCCESS:
+                Snackbar.make(this.binding.getRoot(), R.string.favorites_movie_removed_success, Snackbar.LENGTH_SHORT).show();
                 break;
 
             case FAVORITE_NOT_SET_ERROR:

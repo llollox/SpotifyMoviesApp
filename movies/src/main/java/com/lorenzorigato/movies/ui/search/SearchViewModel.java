@@ -108,9 +108,17 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void onToggleFavorite(MovieViewHolder.Layout layout) {
-        this.movieRepository.toggleFavorite(layout.getId(), (error, data) -> {
+        this.movieRepository.toggleFavorite(layout.getId(), (error, updatedMovie) -> {
             if (error != null) {
                 this.status.setValue(SearchView.Status.FAVORITE_NOT_SET_ERROR);
+            }
+            else {
+                if (updatedMovie.isFavorite()) {
+                    this.status.setValue(SearchView.Status.FAVORITE_ADD_SUCCESS);
+                }
+                else {
+                    this.status.setValue(SearchView.Status.FAVORITE_REMOVED_SUCCESS);
+                }
             }
         });
     }
