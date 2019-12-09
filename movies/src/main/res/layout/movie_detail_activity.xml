@@ -32,6 +32,7 @@
                     android:padding="16dp">
 
                     <TextView
+                        android:id="@+id/movie_subtitle_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -54,6 +55,7 @@
                             android:src="@drawable/ic_star"/>
 
                         <TextView
+                            android:id="@+id/movie_rating_textview"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{String.valueOf(state.rating)}"
@@ -72,6 +74,7 @@
                     android:layout_height="wrap_content" />
 
                 <TextView
+                    android:id="@+id/movie_description_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
@@ -92,6 +95,7 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/movie_collapsing_toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:title="@{state.title}"

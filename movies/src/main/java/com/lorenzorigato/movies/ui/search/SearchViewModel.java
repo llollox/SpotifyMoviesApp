@@ -20,6 +20,8 @@ import com.lorenzorigato.movies.ui.component.movielist.MovieViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class SearchViewModel extends ViewModel {
 
 
@@ -127,6 +129,9 @@ public class SearchViewModel extends ViewModel {
 
     // Private class methods ***********************************************************************
     private void search(String genre) {
+        Timber.w("************************************");
+        Timber.w("SEARCH: " + genre);
+        Timber.w("************************************");
         this.genreName.setValue(genre);
     }
 
