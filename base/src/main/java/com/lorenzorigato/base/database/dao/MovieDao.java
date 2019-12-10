@@ -31,7 +31,6 @@ public abstract class MovieDao {
 
 
     // Class methods *******************************************************************************
-    @Transaction
     @Query("SELECT * FROM movies_table WHERE id = :id")
     public abstract Movie findById(int id);
 
