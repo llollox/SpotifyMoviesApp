@@ -57,6 +57,8 @@ public class MovieDetailViewModel extends ViewModel {
         }
     }
 
+
+    // Private class methods ***********************************************************************
     private MovieDetailView.State mapToState(MovieWithActors movieWithActors) {
         ArrayList<ActorViewHolder.Layout> actors = new ArrayList<>();
         for (Actor actor : movieWithActors.getActors()) {

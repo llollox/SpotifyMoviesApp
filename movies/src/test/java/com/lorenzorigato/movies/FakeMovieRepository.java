@@ -1,6 +1,7 @@
 package com.lorenzorigato.movies;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 
 import com.lorenzorigato.base.components.util.AsyncCallback;
@@ -18,6 +19,8 @@ public class FakeMovieRepository implements IMovieRepository {
 
     private DataSource.Factory<Integer, Movie> findFavoritesFactory;
 
+    private MovieWithActors findByIdMoviewWithActors;
+
 
     // Class methods *******************************************************************************
     public void setToggleFavoriteError(Throwable toggleFavoriteError) {
@@ -32,6 +35,10 @@ public class FakeMovieRepository implements IMovieRepository {
         this.findFavoritesFactory = findFavoritesFactory;
     }
 
+    public void setFindByIdMoviewWithActors(MovieWithActors findByIdMoviewWithActors) {
+        this.findByIdMoviewWithActors = findByIdMoviewWithActors;
+    }
+
 
     // IMovieRepository methods ********************************************************************
     @Override
@@ -41,7 +48,7 @@ public class FakeMovieRepository implements IMovieRepository {
 
     @Override
     public LiveData<MovieWithActors> findById(int id) {
-        return null;
+        return new MutableLiveData<>(this.findByIdMoviewWithActors);
     }
 
     @Override

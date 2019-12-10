@@ -1,4 +1,4 @@
-package com.lorenzorigato.movies.ui;
+package com.lorenzorigato.movies.ui.favorites;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -7,8 +7,6 @@ import androidx.paging.PageKeyedDataSource;
 
 import com.lorenzorigato.base.model.entity.Movie;
 import com.lorenzorigato.movies.FakeMovieRepository;
-import com.lorenzorigato.movies.ui.favorites.FavoritesView;
-import com.lorenzorigato.movies.ui.favorites.FavoritesViewModel;
 
 import org.junit.Rule;
 import org.junit.Test;

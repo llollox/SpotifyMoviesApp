@@ -1,4 +1,4 @@
-package com.lorenzorigato.movies.ui;
+package com.lorenzorigato.movies.ui.search;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
@@ -8,8 +8,6 @@ import com.lorenzorigato.base.model.repository.interfaces.IGenreRepository;
 import com.lorenzorigato.base.model.repository.interfaces.IMovieRepository;
 import com.lorenzorigato.movies.FakeGenreRepository;
 import com.lorenzorigato.movies.FakeMovieRepository;
-import com.lorenzorigato.movies.ui.search.SearchView;
-import com.lorenzorigato.movies.ui.search.SearchViewModel;
 
 import org.junit.Rule;
 import org.junit.Test;
