@@ -8,17 +8,7 @@
     <fragment
         android:id="@+id/search_fragment_dest"
         android:name="com.lorenzorigato.movies.ui.search.SearchFragment"
-        tools:layout="@layout/search_fragment">
-
-        <action
-            android:id="@+id/action_search_fragment_dest_to_detail_fragment_dest"
-            app:destination="@id/detail_fragment_dest" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/detail_fragment_dest"
-        android:name="com.lorenzorigato.movies.ui.detail.DetailFragment"
-        tools:layout="@layout/detail_fragment"/>
+        tools:layout="@layout/search_fragment"/>
 
     <fragment
         android:id="@+id/favorites_fragment_dest"
