@@ -145,27 +145,27 @@ public class FavoritesEspressoTest {
     }
 
 
-    @Test
-    public void favorites__whenSetFavoriteFromDetail__seeMovieInFavorites() throws IOException {
-        this.searchForActionMovies();
-
-        // Click on first item of Recycler View to go to Movie Detail
-        onView(withId(R.id.movieList_recyclerView))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-        // Click on fab to set movie as favorite
-        onView(withId(R.id.fab)).perform(click());
-
-        // Press back button to return to search screen
-        onView(ViewMatchers.isRoot()).perform(pressBack());
-
-        this.closeSearchView();
-
-        this.goToFavorites();
-
-        onView(withId(R.id.movieList_recyclerView))
-                .check(new RecyclerViewItemCountAssertion(1));
-    }
+//    @Test
+//    public void favorites__whenSetFavoriteFromDetail__seeMovieInFavorites() throws IOException {
+//        this.searchForActionMovies();
+//
+//        // Click on first item of Recycler View to go to Movie Detail
+//        onView(withId(R.id.movieList_recyclerView))
+//                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+//
+//        // Click on fab to set movie as favorite
+//        onView(withId(R.id.fab)).perform(click());
+//
+//        // Press back button to return to search screen
+//        onView(ViewMatchers.isRoot()).perform(pressBack());
+//
+//        this.closeSearchView();
+//
+//        this.goToFavorites();
+//
+//        onView(withId(R.id.movieList_recyclerView))
+//                .check(new RecyclerViewItemCountAssertion(1));
+//    }
 
     @Test
     public void favorites__whenSetFavoriteFromList__seeMovieInFavorites() throws IOException {

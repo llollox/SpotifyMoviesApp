@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -27,14 +28,6 @@
             android:layout_height="match_parent"
             android:visibility="@{isRecyclerViewVisible ? View.VISIBLE : View.GONE}"/>
 
-        <ProgressBar
-            android:id="@+id/movieList_progressBar"
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="@{isProgressBarVisible ? View.VISIBLE : View.GONE}"/>
-
         <TextView
             android:id="@+id/movieList_emptyPlaceHolder__textView"
             android:layout_width="wrap_content"
@@ -47,5 +40,22 @@
             android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/text_size_large"
             android:visibility="@{isEmptyTextViewVisible ? View.VISIBLE : View.GONE}"/>
+
+        <FrameLayout
+            android:id="@+id/movieList_loadingContainer_frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorBackground"
+            android:visibility="@{isProgressBarVisible ? View.VISIBLE : View.GONE}"
+            tools:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/movieList_progressBar"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
     </FrameLayout>
 </layout>

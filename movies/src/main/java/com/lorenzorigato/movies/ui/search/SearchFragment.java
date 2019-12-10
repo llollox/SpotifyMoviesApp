@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.lorenzorigato.base.network.NetworkState;
 import com.lorenzorigato.movies.R;
 import com.lorenzorigato.movies.databinding.SearchFragmentBinding;
 import com.lorenzorigato.movies.ui.component.movielist.MovieAdapter;
@@ -59,6 +60,18 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
         MovieAdapter adapter = new MovieAdapter(this);
         RecyclerView recyclerView = this.binding.viewMovieListLayout.movieListRecyclerView;
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (adapter.hasExtraRow() && position == adapter.getItemCount() - 1) {
+                    return 2;
+                }
+                else {
+                    return 1;
+                }
+            }
+        });
+
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
@@ -70,6 +83,7 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
         });
 
         this.viewModel.getState().observe(this, this::handleStateChanged);
+        this.viewModel.getMoviesNetworkState().observe(this, this::handleMovieNetworkStateChanged);
 
         if (savedInstanceState == null) {
             this.viewModel.onViewCreated();
@@ -109,10 +123,6 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
                 Toast.makeText(getActivity(), R.string.search_invalid_genre_error, Toast.LENGTH_SHORT).show();
                 break;
 
-            case MOVIES_NOT_LOADED_ERROR:
-                Toast.makeText(getActivity(), R.string.search_error_movies_not_loaded, Toast.LENGTH_SHORT).show();
-                break;
-
             case FAVORITE_ADD_SUCCESS:
                 Snackbar.make(this.binding.getRoot(), R.string.favorites_movie_added_success, Snackbar.LENGTH_SHORT).show();
                 break;
@@ -123,6 +133,35 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
 
             case FAVORITE_NOT_SET_ERROR:
                 Toast.makeText(getActivity(), R.string.favorites_error_unable_set_favorite, Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    private void handleMovieNetworkStateChanged(NetworkState networkState) {
+        switch (networkState) {
+            case ERROR:
+                this.setLoadingVisible(false);
+                this.setRecyclerViewLoadingVisible(false);
+                Toast.makeText(getActivity(), R.string.search_error_movies_not_loaded, Toast.LENGTH_SHORT).show();
+                break;
+
+            case LOADING:
+                RecyclerView.Adapter adapter = this.binding.viewMovieListLayout.movieListRecyclerView.getAdapter();
+                if (adapter == null) {
+                    return;
+                }
+
+                if (adapter.getItemCount() == 0) {
+                    this.setLoadingVisible(true);
+                }
+                else {
+                    this.setRecyclerViewLoadingVisible(true);
+                }
+                break;
+
+            case SUCCESS:
+                this.setRecyclerViewLoadingVisible(false);
+                this.setLoadingVisible(false);
                 break;
         }
     }
@@ -195,5 +234,18 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
     private void setEmptyPlaceholderTextViewVisible(boolean isVisible) {
         int visibility = isVisible ? View.VISIBLE : View.GONE;
         this.binding.viewMovieListLayout.movieListEmptyPlaceHolderTextView.setVisibility(visibility);
+    }
+
+    private void setLoadingVisible(boolean isVisible) {
+        int visibility = isVisible ? View.VISIBLE : View.GONE;
+        this.binding.viewMovieListLayout.movieListLoadingContainerFrameLayout.setVisibility(visibility);
+    }
+
+    private void setRecyclerViewLoadingVisible(boolean isLoadingVisible) {
+        RecyclerView.Adapter adapter = this.binding.viewMovieListLayout.movieListRecyclerView.getAdapter();
+        if (adapter instanceof MovieAdapter) {
+            MovieAdapter movieAdapter = (MovieAdapter) adapter;
+            movieAdapter.showLoading(isLoadingVisible);
+        }
     }
 }

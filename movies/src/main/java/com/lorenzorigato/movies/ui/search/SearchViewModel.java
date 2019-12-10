@@ -13,9 +13,11 @@ import com.lorenzorigato.base.datastructure.Trie;
 import com.lorenzorigato.base.model.entity.Genre;
 import com.lorenzorigato.base.model.repository.interfaces.IGenreRepository;
 import com.lorenzorigato.base.model.repository.interfaces.IMovieRepository;
+import com.lorenzorigato.base.network.NetworkState;
 import com.lorenzorigato.movies.ui.component.movielist.MovieBoundaryCallback;
 import com.lorenzorigato.movies.ui.component.movielist.MovieLayoutMapper;
 import com.lorenzorigato.movies.ui.component.movielist.MovieViewHolder;
+import com.lorenzorigato.movies.util.Resource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +36,7 @@ public class SearchViewModel extends ViewModel {
     private Trie trie = new Trie(new ArrayList<>());
     private MutableLiveData<String> genreName = new MutableLiveData<>();
     private LiveData<Genre> genre = Transformations.switchMap(this.genreName, name -> this.genreRepository.findByName(name));
-    private LiveData<PagedList<MovieViewHolder.Layout>> layouts = Transformations.switchMap(this.genre, genre -> {
+    private LiveData<Resource<PagedList<MovieViewHolder.Layout>>> resource = Transformations.map(this.genre, genre -> {
         MovieBoundaryCallback boundaryCallback = new MovieBoundaryCallback(genre, this.movieRepository);
 
         DataSource.Factory<Integer, MovieViewHolder.Layout> factory = this.movieRepository
@@ -48,10 +50,15 @@ public class SearchViewModel extends ViewModel {
                 .setPageSize(DATABASE_PAGE_SIZE)
                 .build();
 
-        return new LivePagedListBuilder<>(factory, config)
+        LiveData<PagedList<MovieViewHolder.Layout>> pagedListLiveData =  new LivePagedListBuilder<>(factory, config)
                 .setBoundaryCallback(boundaryCallback)
                 .build();
+
+        return new Resource<>(pagedListLiveData, boundaryCallback.getNetworkStateLiveData());
     });
+
+    private LiveData<PagedList<MovieViewHolder.Layout>> layouts = Transformations.switchMap(this.resource, Resource::getData);
+    private LiveData<NetworkState> moviesNetworkState = Transformations.switchMap(this.resource, Resource::getNetworkState);
 
     private MutableLiveData<List<String>> suggestions = new MutableLiveData<>(new ArrayList<>());
     private SingleLiveData<SearchView.Status> status = new SingleLiveData<>();
@@ -78,6 +85,8 @@ public class SearchViewModel extends ViewModel {
     public LiveData<List<String>> getSuggestions() {
         return this.suggestions;
     }
+
+    public LiveData<NetworkState> getMoviesNetworkState() { return this.moviesNetworkState; }
 
     public void onQueryChanged(String query) {
         if (query == null || query.trim().length() <= 2) {
