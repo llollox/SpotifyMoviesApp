@@ -178,7 +178,7 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
     // MovieAdapter.Listener methods ***************************************************************
     @Override
     public void onFavoriteButtonClicked(MovieViewHolder.Layout layout) {
-        this.viewModel.onToggleFavorite(layout);
+        this.viewModel.onToggleFavorite(layout.getId());
     }
 
     @Override

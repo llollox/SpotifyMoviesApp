@@ -109,8 +109,8 @@ public class SearchViewModel extends ViewModel {
         }
     }
 
-    public void onToggleFavorite(MovieViewHolder.Layout layout) {
-        this.movieRepository.toggleFavorite(layout.getId(), (error, updatedMovie) -> {
+    public void onToggleFavorite(int movieId) {
+        this.movieRepository.toggleFavorite(movieId, (error, updatedMovie) -> {
             if (error != null) {
                 this.status.setValue(SearchView.Status.FAVORITE_NOT_SET_ERROR);
             }
