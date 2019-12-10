@@ -1,15 +1,12 @@
 package com.lorenzorigato.base.model.repository;
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-
-import com.lorenzorigato.base.FakeGenreLocalDataSource;
-import com.lorenzorigato.base.FakeGenreRemoteDataSource;
+import com.lorenzorigato.base.fake.FakeGenreLocalDataSource;
+import com.lorenzorigato.base.fake.FakeGenreRemoteDataSource;
 import com.lorenzorigato.base.model.datasource.local.interfaces.IGenreLocalDataSource;
 import com.lorenzorigato.base.model.entity.Genre;
 import com.lorenzorigato.base.model.error.TaskAlreadyRunningError;
 import com.lorenzorigato.base.network.error.NetworkRequestError;
 
-import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -36,12 +33,6 @@ public class GenreRepositoryTest {
 
     // Private class attributes ********************************************************************
     private IGenreLocalDataSource mockGenreLocalDataSource = Mockito.mock(IGenreLocalDataSource.class);
-
-
-    // Class attributes ****************************************************************************
-    @Rule
-    public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
-
 
 
     // Test methods ********************************************************************************

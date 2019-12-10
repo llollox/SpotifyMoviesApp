@@ -1,4 +1,4 @@
-package com.lorenzorigato.base;
+package com.lorenzorigato.base.fake;
 
 import androidx.lifecycle.LiveData;
 

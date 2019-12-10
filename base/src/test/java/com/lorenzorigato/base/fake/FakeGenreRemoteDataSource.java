@@ -1,4 +1,4 @@
-package com.lorenzorigato.base;
+package com.lorenzorigato.base.fake;
 
 import com.lorenzorigato.base.components.util.AsyncCallback;
 import com.lorenzorigato.base.model.datasource.remote.interfaces.IGenreRemoteDataSource;
