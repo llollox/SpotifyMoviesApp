@@ -20,8 +20,6 @@ import com.lorenzorigato.movies.ui.component.movielist.MovieViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
-
 public class SearchViewModel extends ViewModel {
 
 
@@ -65,8 +63,6 @@ public class SearchViewModel extends ViewModel {
     public SearchViewModel(IGenreRepository genreRepository, IMovieRepository movieRepository) {
         this.movieRepository = movieRepository;
         this.genreRepository = genreRepository;
-        this.setLoadingVisible(true);
-        this.genreRepository.updateAll(this::handleFetchAllGenreCallback);
     }
 
 
@@ -108,6 +104,9 @@ public class SearchViewModel extends ViewModel {
             String genre = suggestions.get(position);
             this.search(genre);
         }
+        else {
+            this.status.setValue(SearchView.Status.INVALID_GENRE_ERROR);
+        }
     }
 
     public void onToggleFavorite(MovieViewHolder.Layout layout) {
@@ -126,12 +125,14 @@ public class SearchViewModel extends ViewModel {
         });
     }
 
+    public void onViewCreated() {
+        this.setLoadingVisible(true);
+        this.genreRepository.updateAll(this::handleFetchAllGenreCallback);
+    }
+
 
     // Private class methods ***********************************************************************
     private void search(String genre) {
-        Timber.w("************************************");
-        Timber.w("SEARCH: " + genre);
-        Timber.w("************************************");
         this.genreName.setValue(genre);
     }
 

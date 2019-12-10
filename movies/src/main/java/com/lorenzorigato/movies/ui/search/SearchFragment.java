@@ -71,6 +71,10 @@ public class SearchFragment extends DaggerFragment implements MovieAdapter.Liste
 
         this.viewModel.getState().observe(this, this::handleStateChanged);
 
+        if (savedInstanceState == null) {
+            this.viewModel.onViewCreated();
+        }
+
         return binding.getRoot();
     }
 
