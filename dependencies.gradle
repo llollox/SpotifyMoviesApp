@@ -64,6 +64,7 @@ ext {
             ],
 
             testingAndroid : [
+                    coreTesting          : "androidx.arch.core:core-testing:${versions.testingAndroid.coreTesting}",
                     espressocore         : "androidx.test.espresso:espresso-core:${versions.testingAndroid.espresso}",
                     espressoContrib      : "androidx.test.espresso:espresso-contrib:${versions.testingAndroid.espresso}",
                     testrunner           : "androidx.test:runner:${versions.testingAndroid.testRunner}",
