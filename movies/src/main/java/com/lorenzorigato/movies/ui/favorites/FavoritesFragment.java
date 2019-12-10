@@ -76,7 +76,7 @@ public class FavoritesFragment extends DaggerFragment implements MovieAdapter.Li
     // MovieAdapter.Listener methods ***************************************************************
     @Override
     public void onFavoriteButtonClicked(MovieViewHolder.Layout layout) {
-        this.viewModel.onToggleFavorite(layout);
+        this.viewModel.onToggleFavorite(layout.getId());
     }
 
     @Override

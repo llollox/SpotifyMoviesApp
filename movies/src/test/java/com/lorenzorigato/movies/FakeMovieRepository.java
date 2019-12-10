@@ -16,6 +16,8 @@ public class FakeMovieRepository implements IMovieRepository {
     private Throwable toggleFavoriteError;
     private Movie toggleFavoriteMovie;
 
+    private DataSource.Factory<Integer, Movie> findFavoritesFactory;
+
 
     // Class methods *******************************************************************************
     public void setToggleFavoriteError(Throwable toggleFavoriteError) {
@@ -26,10 +28,15 @@ public class FakeMovieRepository implements IMovieRepository {
         this.toggleFavoriteMovie = toggleFavoriteMovie;
     }
 
+    public void setFindFavoritesFactory(DataSource.Factory<Integer, Movie> findFavoritesFactory) {
+        this.findFavoritesFactory = findFavoritesFactory;
+    }
+
+
     // IMovieRepository methods ********************************************************************
     @Override
     public DataSource.Factory<Integer, Movie> findFavorites() {
-        return null;
+        return this.findFavoritesFactory;
     }
 
     @Override
@@ -53,4 +60,5 @@ public class FakeMovieRepository implements IMovieRepository {
             callback.onCompleted(this.toggleFavoriteError, this.toggleFavoriteMovie);
         }
     }
+
 }

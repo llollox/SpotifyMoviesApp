@@ -38,7 +38,7 @@ public class FavoritesViewModel extends ViewModel {
                 .setPageSize(DATABASE_PAGE_SIZE)
                 .build();
 
-        this.layouts = new LivePagedListBuilder(factory, config).build();
+        this.layouts = new LivePagedListBuilder<>(factory, config).build();
     }
 
 
@@ -47,8 +47,8 @@ public class FavoritesViewModel extends ViewModel {
 
     public LiveData<PagedList<MovieViewHolder.Layout>> getLayouts() { return this.layouts; }
 
-    public void onToggleFavorite(MovieViewHolder.Layout layout) {
-        this.movieRepository.toggleFavorite(layout.getId(), (error, updatedMovie) -> {
+    public void onToggleFavorite(int movieId) {
+        this.movieRepository.toggleFavorite(movieId, (error, updatedMovie) -> {
             if (error != null) {
                 this.status.setValue(FavoritesView.Status.FAVORITE_NOT_SET_ERROR);
             }

@@ -48,7 +48,7 @@ public class SearchViewModel extends ViewModel {
                 .setPageSize(DATABASE_PAGE_SIZE)
                 .build();
 
-        return new LivePagedListBuilder(factory, config)
+        return new LivePagedListBuilder<>(factory, config)
                 .setBoundaryCallback(boundaryCallback)
                 .build();
     });

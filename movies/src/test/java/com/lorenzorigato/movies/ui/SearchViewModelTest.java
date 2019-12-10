@@ -35,8 +35,6 @@ public class SearchViewModelTest {
     }
 
 
-
-
     // Class attributes ****************************************************************************
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
