@@ -23,6 +23,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.lorenzorigato.base.network.component.retry.ApiHelper.enqueueWithRetry;
+
 public class MovieRemoteDataSource implements IMovieRemoteDataSource {
 
 
@@ -52,7 +54,7 @@ public class MovieRemoteDataSource implements IMovieRemoteDataSource {
             return;
         }
 
-        this.movieService.getMovies(genre, afterMovieId, pageSize).enqueue(new Callback<MovieEnvelope>() {
+        enqueueWithRetry(this.movieService.getMovies(genre, afterMovieId, pageSize), new Callback<MovieEnvelope>() {
             @Override
             public void onResponse(@NotNull Call<MovieEnvelope> call, @NotNull Response<MovieEnvelope> response) {
                 if (callback == null) {

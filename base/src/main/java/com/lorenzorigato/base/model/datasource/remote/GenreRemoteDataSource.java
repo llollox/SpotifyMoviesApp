@@ -17,6 +17,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.lorenzorigato.base.network.component.retry.ApiHelper.enqueueWithRetry;
+
 public class GenreRemoteDataSource implements IGenreRemoteDataSource {
 
 
@@ -43,7 +45,7 @@ public class GenreRemoteDataSource implements IGenreRemoteDataSource {
             return;
         }
 
-        this.genreService.getAll().enqueue(new Callback<List<Genre>>() {
+        enqueueWithRetry(this.genreService.getAll(), new Callback<List<Genre>>() {
 
             @Override
             public void onResponse(@NotNull Call<List<Genre>> call, @NotNull Response<List<Genre>> response) {
