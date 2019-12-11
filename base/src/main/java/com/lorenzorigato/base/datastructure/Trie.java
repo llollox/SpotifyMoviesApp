@@ -1,5 +1,7 @@
 package com.lorenzorigato.base.datastructure;
 
+import com.lorenzorigato.base.util.LevenstheinDistance;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,6 +24,7 @@ public class Trie {
 
     // Private class attributes ********************************************************************
     private TrieNode root = new TrieNode();
+    private LevenstheinDistance levenstheinDistance = new LevenstheinDistance();
 
 
     // Constructors ********************************************************************************
@@ -94,11 +97,16 @@ public class Trie {
         String fixPrefix = prefix == null ? "" : prefix;
         int fixMaxDistance = maxDistance < 0 ? 0 : maxDistance;
 
-        Map<TrieNode, String> selected = new HashMap<>();
-        this.levenstheinDistanceDfs(this.root, new StringBuilder(fixPrefix), 0, selected, 0, fixMaxDistance);
+        HashMap<TrieNode, String> selected = this.getNodesOfLevel(
+                this.root, fixPrefix.length(), fixMaxDistance);
+
+        HashMap<TrieNode, String> levenstheinDistanceFiltered = this.filterWithLevenstheinDistance(
+                fixPrefix, selected, fixMaxDistance);
+
+        HashMap<TrieNode, String> removedChildren = this.removeChildNodes(levenstheinDistanceFiltered);
 
         Set<String> strings = new HashSet<>();
-        for (Map.Entry<TrieNode, String> entry : selected.entrySet()) {
+        for (Map.Entry<TrieNode, String> entry : removedChildren.entrySet()) {
             TrieNode node = entry.getKey();
             String nodePrefix = entry.getValue();
             strings.addAll(this.getLeafStrings(node, nodePrefix));
@@ -156,49 +164,71 @@ public class Trie {
         }
     }
 
-    private void levenstheinDistanceDfs(
-            TrieNode node, StringBuilder prefix,
-            int index, Map<TrieNode, String> selected,
-            int distance, int maxDistance) {
+    private HashMap<TrieNode, String> removeChildNodes(HashMap<TrieNode, String> map) {
+        HashMap<TrieNode, String> filtered = new HashMap<>(map);
+        for (HashMap.Entry<TrieNode, String> entry : map.entrySet()) {
+            TrieNode root = entry.getKey();
+            removeChildrenDfs(root, root, filtered);
+        }
+        return filtered;
+    }
 
-        if (distance > maxDistance || selected.containsKey(node)) {
-            return;
+    private void removeChildrenDfs(TrieNode root, TrieNode node, HashMap<TrieNode, String> map) {
+        if (node != root) {
+            map.remove(node);
         }
 
-        if (index == prefix.length()) {
-            selected.put(node, prefix.toString());
-            return;
-        }
-
-        char currentChar = prefix.charAt(index);
-        TrieNode nextNode = node.getChildren().get(currentChar);
-
-        if (nextNode != null) {
-            // Character found.
-            // Continue without incrementing distance
-            levenstheinDistanceDfs(nextNode, prefix, index + 1, selected, distance, maxDistance);
-        }
-
-        // Try edit distance cases for each child:
         for (HashMap.Entry<Character, TrieNode> entry : node.getChildren().entrySet()) {
-
-            char childChar = entry.getKey();
-            TrieNode childNode = entry.getValue();
-
-            // Insertion
-            prefix.insert(index, childChar);
-            levenstheinDistanceDfs(childNode, prefix, index + 1, selected, distance + 1, maxDistance);
-            prefix.deleteCharAt(index);
-
-            // Deletion
-            prefix.deleteCharAt(index);
-            levenstheinDistanceDfs(node, prefix, index, selected, distance + 1, maxDistance);
-            prefix.insert(index, currentChar);
-
-            // Replacement
-            prefix.setCharAt(index, childChar);
-            levenstheinDistanceDfs(childNode, prefix, index + 1, selected, distance + 1, maxDistance);
-            prefix.setCharAt(index, currentChar);
+            TrieNode child = entry.getValue();
+            this.removeChildrenDfs(root, child, map);
         }
     }
+
+    private HashMap<TrieNode, String> filterWithLevenstheinDistance(String input, HashMap<TrieNode, String> mapNodes, int maxDistance) {
+        HashMap<TrieNode, String> filtered = new HashMap<>();
+        for (HashMap.Entry<TrieNode, String> entry : mapNodes.entrySet()) {
+            TrieNode node = entry.getKey();
+            String prefix = entry.getValue();
+
+            int levenstheinDistance = this.levenstheinDistance.levenstheinDistance(input, prefix);
+            if (levenstheinDistance <= maxDistance) {
+                filtered.put(node, prefix);
+            }
+        }
+        return filtered;
+    }
+
+
+    private HashMap<TrieNode, String> getNodesOfLevel(TrieNode root, int level, int maxDistance) {
+        HashMap<TrieNode, String> mapNodes = new HashMap<>();
+        StringBuilder prefix = new StringBuilder();
+        this.calculatesNodesOfLevelDfs(root, level, level + maxDistance, mapNodes, prefix);
+        return mapNodes;
+    }
+
+    private void calculatesNodesOfLevelDfs(
+            TrieNode node, int lowerBoundLevel, int upperBoundLevel,
+            HashMap<TrieNode, String> mapNodes, StringBuilder prefix) {
+
+        int currentLevel = prefix.length();
+
+        if (currentLevel > upperBoundLevel) {
+            return;
+        }
+
+        boolean isWithinLevelBounds = (currentLevel >= lowerBoundLevel && currentLevel <= upperBoundLevel);
+
+        if (isWithinLevelBounds || node.getChildren().isEmpty() || node.isEndOfWord()) {
+            mapNodes.put(node, prefix.toString());
+        }
+
+        for (HashMap.Entry<Character, TrieNode> entry : node.getChildren().entrySet()) {
+            TrieNode child = entry.getValue();
+            Character character = entry.getKey();
+            prefix.append(character);
+            this.calculatesNodesOfLevelDfs(child, lowerBoundLevel, upperBoundLevel, mapNodes, prefix);
+            prefix.deleteCharAt(prefix.length() - 1);
+        }
+    }
+
 }
