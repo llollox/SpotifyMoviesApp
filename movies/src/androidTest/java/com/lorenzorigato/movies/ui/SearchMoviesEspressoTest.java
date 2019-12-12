@@ -98,24 +98,6 @@ public class SearchMoviesEspressoTest {
                 .check(matches(withText(initialMessage)));
     }
 
-//    @Test
-//    public void search__whenGenreLoadFails__verifyErrorMessageShown() throws IOException {
-//        MockResponse genresResponse = new MockResponse()
-//                .setResponseCode(500);
-//
-//        this.webServer.enqueue(genresResponse);
-//        this.webServer.start(8080);
-//        this.activityRule.launchActivity(null);
-//
-//        View decorView = this.activityRule.getActivity().getWindow().getDecorView();
-//        String toastMessage = this.context.getString(R.string.search_error_genres_not_loaded);
-//
-//        // Verify a toast is shown with error message
-//        onView(withText(toastMessage))
-//                .inRoot(withDecorView(not(is(decorView))))
-//            .check(matches(isDisplayed()));
-//    }
-
     @Test
     public void search__whenTypeWrongGenre__verifyErrorMessageShown() throws IOException, InterruptedException {
         Thread.sleep(1000);
@@ -142,61 +124,4 @@ public class SearchMoviesEspressoTest {
                 .inRoot(withDecorView(not(is(decorView))))
                 .check(matches(isDisplayed()));
     }
-
-//    @Test
-//    public void search__whenProperGenreChosen__verifyMoviesAreShown() throws IOException {
-//        MockResponse genresResponse = new MockResponse()
-//                .setResponseCode(200)
-//                .setBody(new Gson().toJson(VALID_GENRES));
-//
-//        ArrayList<GenreDTO> genreDTOS = new ArrayList<>();
-//        genreDTOS.add(new GenreDTO(1, "Action"));
-//        ArrayList<ActorDTO> actorDTOS = new ArrayList<>();
-//        ArrayList<MovieDTO> movieDTOS = new ArrayList<>();
-//        MovieDTO movieDTO = new MovieDTO(
-//                1,
-//                "Batman Begins",
-//                "Subtitle",
-//                "Description",
-//                8.0,
-//                new PictureDTO(
-//                        "thumb.jpg",
-//                        "medium.jpg",
-//                        "big.jpg"),
-//                genreDTOS,
-//                actorDTOS);
-//        movieDTOS.add(movieDTO);
-//
-//        MetadataDTO metadataDTO = new MetadataDTO(true, 1, 1);
-//        MovieEnvelope envelope = new MovieEnvelope(metadataDTO, movieDTOS);
-//
-//        MockResponse moviesResponse = new MockResponse()
-//                .setResponseCode(200)
-//                .setBody(new Gson().toJson(envelope));
-//
-//        this.webServer.enqueue(genresResponse);
-//        this.webServer.enqueue(moviesResponse);
-//        this.webServer.start(8080);
-//        this.activityRule.launchActivity(null);
-//
-//        // Click on search button
-//        onView(withId(R.id.action_search)).perform(click());
-//
-//        // Type Genre on Search View
-//        onView(isAssignableFrom(EditText.class))
-//                .perform(typeText("Action"), pressKey(KeyEvent.KEYCODE_ENTER));
-//
-//        // Without this sleep Espresso assert the recycler view too early and assertion fails
-//        try {
-//            Thread.sleep(500);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        // Recycler View is Visible
-//        onView(withId(R.id.movieList_recyclerView)).check(matches(isDisplayed()));
-//
-//        // Verify count number items in Recycler View
-//        onView(withId(R.id.movieList_recyclerView)).check(new RecyclerViewItemCountAssertion(1));
-//    }
 }
