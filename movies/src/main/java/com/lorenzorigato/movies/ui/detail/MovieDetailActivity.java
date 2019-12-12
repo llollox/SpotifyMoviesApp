@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.lorenzorigato.base.security.ISecurityManager;
 import com.lorenzorigato.movies.R;
 import com.lorenzorigato.movies.databinding.MovieDetailActivityBinding;
 import com.lorenzorigato.movies.ui.detail.actors.ActorAdapter;
@@ -36,6 +37,9 @@ public class MovieDetailActivity extends DaggerAppCompatActivity {
     @Inject
     MovieDetailViewModel viewModel;
 
+    @Inject
+    ISecurityManager securityManager;
+
 
     // Private class attributes ********************************************************************
     private MovieDetailActivityBinding binding;
@@ -54,6 +58,12 @@ public class MovieDetailActivity extends DaggerAppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!this.securityManager.canAppExecute()) {
+            this.finishAndRemoveTask();
+            return;
+        }
+
         this.binding = DataBindingUtil.setContentView(this, R.layout.movie_detail_activity);
         this.configureActionBar();
         this.configureActorRecyclerView();
